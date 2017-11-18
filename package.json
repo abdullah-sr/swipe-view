@@ -38,6 +38,8 @@
     }
   },
   "dependencies": {
+    "material-ui": "^1.0.0-beta.21",
+    "material-ui-icons": "^1.0.0-beta.17",
     "promise-polyfill": "^6.0.2",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
