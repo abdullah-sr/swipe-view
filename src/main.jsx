@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import 'whatwg-fetch';
-import SwipeView from './components/SwipeView';
+import App from './components/App';
 
 
-render(<SwipeView />, document.getElementById('app'));
+render(<App />, document.getElementById('app'));

@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import {virtualize} from 'react-swipeable-views-utils';
+import {CircularProgress} from 'material-ui/Progress';
+import { blue } from 'material-ui/colors';
+import Card, {CardImage} from './Card';
 
 class SwipeView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             images: [],
+            loading: true,
         };
 
         this.styles = {
@@ -23,10 +28,11 @@ class SwipeView extends Component {
             for (let item of json.items) {
                 self.setState(
                     (state) => {
-                        return {images: state.images.concat(`https://graph.facebook.com/${item.potentialRoommate.userID}/picture?width=400&height=400`)}
+                        return { images: state.images.concat(`https://graph.facebook.com/${item.potentialRoommate.userID}/picture?width=400&height=400`) };
                     }
                 )
             }
+            this.setState({ loading: false });
         }).catch((ex) => {
             console.log('parsing failed', ex);
         });
@@ -35,14 +41,17 @@ class SwipeView extends Component {
     listItems() {
         return this.state.images.map(img =>
             (
-                <div key={img}>
-                    <img src={img} alt="user" />
-                </div>
+                <Card key={img}>
+                    <CardImage src={img}/>
+                </Card>
             ));
     }
 
 
     render() {
+        if (this.state.loading) {
+            return (<CircularProgress size={50} style={{ color: blue[500] }} />);
+        }
         return (
             <SwipeableViews slideStyle={this.styles.slideStyle}>
                 {this.listItems()}

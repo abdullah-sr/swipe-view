@@ -38,12 +38,14 @@
     }
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "material-ui": "^1.0.0-beta.21",
     "material-ui-icons": "^1.0.0-beta.17",
     "promise-polyfill": "^6.0.2",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-swipeable-views": "^0.12.10",
+    "react-swipeable-views-utils": "^0.12.9",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
