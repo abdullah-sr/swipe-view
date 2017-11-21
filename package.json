@@ -12,7 +12,7 @@
     "presets": [
       "env",
       "react",
-      "stage-3"
+      "stage-0"
     ]
   },
   "eslintConfig": {
@@ -42,10 +42,13 @@
     "material-ui": "^1.0.0-beta.21",
     "material-ui-icons": "^1.0.0-beta.17",
     "promise-polyfill": "^6.0.2",
+    "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-swipeable-views": "^0.12.10",
+    "react-swipeable-views-core": "^0.12.9",
     "react-swipeable-views-utils": "^0.12.9",
+    "warning": "^3.0.0",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
@@ -53,12 +56,12 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-3": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "eslint": "^4.11.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.5.0",
+    "eslint-plugin-react": "^7.5.1",
     "html-webpack-plugin": "^2.30.1",
     "uglifyjs-webpack-plugin": "^1.0.1",
     "webpack": "^3.8.1"

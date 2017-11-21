@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
-import SwipeableViews from 'react-swipeable-views';
-import {virtualize} from 'react-swipeable-views-utils';
-import {CircularProgress} from 'material-ui/Progress';
+import React, { Component } from 'react';
+import SwipeableViews from './SwipeableViews';
+import { virtualize } from 'react-swipeable-views-utils';
+import { CircularProgress } from 'material-ui/Progress';
 import { blue } from 'material-ui/colors';
-import Card, {CardImage} from './Card';
+import Card, { CardImage } from './Card';
+
 
 class SwipeView extends Component {
     constructor(props) {
@@ -19,6 +20,9 @@ class SwipeView extends Component {
                 justifyContent: 'center',
             },
         };
+
+        this.listItems = this.listItems.bind(this);
+        this.slideRenderer = this.slideRenderer.bind(this);
 
         let self = this;
         fetch('https://renthoop-production.appspot.com/_ah/api/renthoopendpoint/v1/potentialroommate/181004659047340?latitude=34.072926&longitude=-118.442986&state=CA&locality=West%20Hollywood&radius=32000.000000').then((response) => {
@@ -38,6 +42,16 @@ class SwipeView extends Component {
         });
     }
 
+
+    slideRenderer({ index }) {
+        console.log(index);
+        return (
+            <Card key={index}>
+                <CardImage src={this.state.images[index]} />
+            </Card>
+        );
+    }
+
     listItems() {
         return this.state.images.map(img =>
             (
@@ -50,13 +64,18 @@ class SwipeView extends Component {
 
     render() {
         if (this.state.loading) {
-            return (<CircularProgress size={50} style={{ color: blue[500] }} />);
+            return (<CircularProgress size={50} style={{ color: blue[500] }}/>);
         }
+        const VirtualizeSwipeableViews = virtualize(SwipeableViews);
         return (
-            <SwipeableViews slideStyle={this.styles.slideStyle}>
-                {this.listItems()}
-            </SwipeableViews>
+            <VirtualizeSwipeableViews slideRenderer={this.slideRenderer} overscanSlideAfter={7} overscanSlideBefore={7}
+                                      slideCount={this.state.images.length} slideStyle={this.styles.slideStyle}/>
         );
+        // return (
+        //     <SwipeableViews slideStyle={this.styles.slideStyle}>
+        //         {this.listItems()}
+        //     </SwipeableViews>
+        // );
     }
 }
 
