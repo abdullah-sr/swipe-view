@@ -7,11 +7,8 @@ import SwipeView from './SwipeView';
 const styles = () => ({
 
     '@global': {
-        html: {
+        'html, body': {
             height: '100%',
-        },
-        body: {
-            height: 'calc(100% - 20px)',
             margin: 0,
         },
     },
@@ -23,7 +20,6 @@ const styles = () => ({
         maxWidth: '600px',
         margin: '0 auto',
         backgroundColor: '#f2f6f5',
-        padding: '10px',
     },
 });
 

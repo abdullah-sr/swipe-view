@@ -7,6 +7,8 @@ const styles = () => ({
     cardImage: {
         minWidth: '100%',
         maxWidth: '100%',
+        borderTopLeftRadius: 2,
+        borderTopRightRadius: 2,
     },
 });
 

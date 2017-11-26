@@ -3,7 +3,7 @@ import SwipeableViews from 'react-swipeable-views';
 // import { virtualize } from 'react-swipeable-views-utils';
 import { CircularProgress } from 'material-ui/Progress';
 import { blue } from 'material-ui/colors';
-import Card, { CardImage } from './Card';
+import Card, { CardImage, CardBody } from './Card';
 
 
 // const VirtualizeSwipeableViews = virtualize(SwipeableViews);
@@ -18,9 +18,18 @@ class SwipeView extends Component {
         };
 
         this.styles = {
+            swipeViewRoot: {
+                height: '100%',
+                boxShadow: '0 5px 8px rgba(0, 0, 0, 0.19), 0 1px 3px rgba(0, 0, 0, 0.23)',
+            },
+            swipeViewContainer: {
+                height: '100%',
+            },
             slideStyle: {
                 display: 'flex',
                 justifyContent: 'center',
+                padding: 10,
+                width: 'calc(100% - 20px)',
             },
         };
 
@@ -60,6 +69,9 @@ class SwipeView extends Component {
             (
                 <Card key={img}>
                     <CardImage src={img}/>
+                    <CardBody>Hello,
+                        I am the cofounder and CTO of RentHoop. Please feel free to swipe right if you would like to
+                        provide any feedback about the app or simply say </CardBody>
                 </Card>
             ));
     }
@@ -67,10 +79,11 @@ class SwipeView extends Component {
 
     render() {
         if (this.state.loading) {
-            return (<CircularProgress size={50} style={{ color: blue[500] }} />);
+            return (<CircularProgress size={50} style={{ color: blue[500] }}/>);
         }
+        const { swipeViewRoot, swipeViewContainer, slideStyle } = this.styles;
         return (
-            <SwipeableViews slideStyle={this.styles.slideStyle}>
+            <SwipeableViews style={swipeViewRoot} containerStyle={swipeViewContainer} slideStyle={slideStyle}>
                 {this.listItems()}
             </SwipeableViews>
         );
