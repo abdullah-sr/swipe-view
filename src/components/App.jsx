@@ -1,5 +1,5 @@
 import React from 'react';
-import {withStyles} from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
 import SwipeView from './SwipeView';
 

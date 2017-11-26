@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "dev": "./node_modules/.bin/webpack -d -w"
+    "dev": "./node_modules/.bin/webpack -d -w",
+    "prod": "./node_modules/.bin/webpack"
   },
   "author": "",
   "license": "",
