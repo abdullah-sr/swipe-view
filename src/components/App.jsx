@@ -8,6 +8,7 @@ const styles = () => ({
 
     '@global': {
         'html, body': {
+            fontFamily: 'Roboto, sans-serif',
             height: '100%',
             margin: 0,
         },

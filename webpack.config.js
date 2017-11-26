@@ -16,7 +16,27 @@ const config = {
     },
     module: {
         rules: [
-            { test: /\.jsx?$/, include: APP_DIR, use: 'babel-loader' },
+            {
+                test: /\.jsx?$/,
+                include: APP_DIR,
+                use: 'babel-loader',
+            },
+            {
+                test: /\.(woff|woff2)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'fonts/',
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
+            },
         ],
     },
     plugins: [
