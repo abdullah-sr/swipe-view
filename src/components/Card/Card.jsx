@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
 
@@ -16,15 +16,23 @@ const styles = () => ({
 });
 
 
-const Card = (props) => {
-    const className = classNames(props.classes.card, props.className);
-    console.log('card renderde');
-    return (
-        <div className={className} style={props.style}>
-            {props.children}
-        </div>
-    );
-};
+class Card extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+        return false;
+    }
+
+    render() {
+        const props = this.props;
+        const className = classNames(props.classes.card, props.className);
+        console.log('card renderde');
+        return (
+            <div className={className}>
+                {props.children}
+            </div>
+        );
+    }
+}
+
 
 
 export default withStyles(styles)(Card);
