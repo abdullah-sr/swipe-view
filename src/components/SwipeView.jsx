@@ -22,6 +22,10 @@ class SwipeView extends Component {
         return age.getUTCFullYear() - 1970;
     }
 
+    static getDealbreakers(user) {
+        return Object.keys(user).filter(key => key.startsWith('okWith') && user[key] === false);
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -80,6 +84,7 @@ class SwipeView extends Component {
     listItems() {
         return this.state.users.map((user) => {
             const location = user.roommatePreferenceType && user.school != null ? user.school : user.locality;
+            const dealbreakers = this.constructor.getDealbreakers(user);
             return (
                 <Card key={user.userID}>
                     <CardImage
@@ -92,8 +97,9 @@ class SwipeView extends Component {
                         bio={user.aboutMe.length < 220 ? user.aboutMe : `${user.aboutMe.slice(0, 220)}...`}
                         rent={`$${user.budget} ${(user.hasPlace ? 'rent' : 'budget')}`}
                         type={user.hasPlace ? 'Has a room' : 'Need a room'}
+                        hasDealbreakers={dealbreakers.length > 0}
                     />
-                    <CardFooter/>
+                    <CardFooter dealbreakers={dealbreakers} />
                 </Card>
             );
         });

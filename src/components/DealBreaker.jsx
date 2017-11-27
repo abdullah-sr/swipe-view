@@ -23,7 +23,7 @@ const DealBreaker = (props) => {
     const { container, image } = props.classes;
     return (
         <div className={container}>
-            <img className={image} src="./images/Cheap.png"/> Cheap
+            <img className={image} src={props.pic} /> {props.text}
         </div>
     );
 };

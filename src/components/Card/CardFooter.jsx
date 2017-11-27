@@ -15,12 +15,27 @@ const styles = () => ({
 });
 
 
+function getDealBreakers(list) {
+    const breakers =  list.map((key) => {
+        const text = key.slice(6); // split at okWith
+        return (
+            <DealBreaker
+                key={text}
+                text={text.split(/(?=[A-Z])/).join(" ")}
+                pic={`/images/${text}.png`}
+            />
+        );
+    });
+    // only return 3 deal breakers
+    return breakers.slice(0, 3);
+}
+
+
 const CardFooter = (props) => {
+    if (props.dealbreakers.length === 0) return '';
     return (
         <div className={props.classes.cardFooter}>
-            <DealBreaker/>
-            <DealBreaker/>
-            <DealBreaker/>
+            {getDealBreakers(props.dealbreakers)}
         </div>
     );
 };
