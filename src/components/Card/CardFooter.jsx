@@ -10,6 +10,7 @@ const styles = () => ({
         display: 'flex',
         alignItems: 'center',
         overflow: 'hidden',
+        position: 'relative',
     },
 });
 

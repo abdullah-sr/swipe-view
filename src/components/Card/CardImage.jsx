@@ -32,6 +32,17 @@ const styles = () => ({
         fontSize: '1.25rem',
         marginRight: 5,
     },
+    newOverlay: {
+        position: 'absolute',
+        backgroundColor: '#a80976',
+        fontSize: '0.75rem',
+        top: 2,
+        right: 2,
+        padding: 3,
+        borderRadius: 3,
+        opacity: 0.9,
+        color: '#fff',
+    },
 });
 
 
@@ -40,13 +51,19 @@ const CardImage = (props) => {
         imageContainer,
         cardImage,
         locationOverlay,
-        locationIcon
+        locationIcon,
+        newOverlay,
     } = props.classes;
+    let newCard = '';
+    if (props.new){
+        newCard = <div className={newOverlay}>New</div>;
+    }
     return (
         <div className={imageContainer}>
             <img className={cardImage} src={props.src} alt="user"/>
+            {newCard}
             <div className={locationOverlay}>
-                <Icon className={locationIcon}>location_on</Icon> Los Angeles
+                <Icon className={locationIcon}>location_on</Icon>{props.location}
             </div>
         </div>
     );

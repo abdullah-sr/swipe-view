@@ -10,10 +10,22 @@ import Card, { CardImage, CardBody, CardFooter } from './Card';
 
 
 class SwipeView extends Component {
+    static flattenItemObj(item) {
+        const { potentialRoommate, ...other } = item;
+        other.distance = other.distance.distance;
+        return { ...potentialRoommate, ...other };
+    }
+
+    static calculateAge(d) {
+        const diff = Date.now() - new Date(d);
+        const age = new Date(diff);
+        return age.getUTCFullYear() - 1970;
+    }
+
     constructor(props) {
         super(props);
         this.state = {
-            images: [],
+            users: [],
             loading: true,
         };
 
@@ -53,28 +65,40 @@ class SwipeView extends Component {
             const response = await fetch('https://renthoop-production.appspot.com/_ah/api/renthoopendpoint/v1/potentialroommate/181004659047340?latitude=34.072926&longitude=-118.442986&state=CA&locality=West%20Hollywood&radius=32000.000000');
             const reponseJson = await response.json();
             console.log(reponseJson);
-            const images = [];
+            const users = [];
             for (const item of reponseJson.items) {
-                images.push(`https://graph.facebook.com/${item.potentialRoommate.userID}/picture?width=400&height=400`);
+                // users.push(`https://graph.facebook.com/${item.potentialRoommate.userID}/picture?width=400&height=400`);
+                const user = this.constructor.flattenItemObj(item);
+                users.push(user);
             }
-            this.setState({ loading: false, images });
+            this.setState({ loading: false, users });
         } catch (error) {
             console.log(error);
         }
     }
 
     listItems() {
-        return this.state.images.map(img =>
-            (
-                <Card key={img}>
-                    <CardImage src={img}/>
-                    <CardBody>Hello,
-                        I am the cofounder and CTO of RentHoop. Please feel free to swipe right if you would like to
-                        provide any feedback about the app or simply say </CardBody>
+        return this.state.users.map((user) => {
+            const location = user.roommatePreferenceType && user.school != null ? user.school : user.locality;
+            return (
+                <Card key={user.userID}>
+                    <CardImage
+                        src={`https://graph.facebook.com/${user.userID}/picture?width=400&height=400`}
+                        location={location}
+                        new={!user.hasSeen}
+                    />
+                    <CardBody
+                        name={`${user.firstName} ${user.lastName}, ${this.constructor.calculateAge(user.birthDate)}`}
+                        bio={user.aboutMe.length < 220 ? user.aboutMe : `${user.aboutMe.slice(0, 220)}...`}
+                        rent={`$${user.budget} ${(user.hasPlace ? 'rent' : 'budget')}`}
+                        type={user.hasPlace ? 'Has a room' : 'Need a room'}
+                    />
                     <CardFooter/>
                 </Card>
-            ));
+            );
+        });
     }
+
 
     render() {
         if (this.state.loading) {

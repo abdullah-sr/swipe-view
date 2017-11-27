@@ -7,8 +7,12 @@ const styles = () => ({
     '@global': {
         'html, body': {
             fontFamily: 'Roboto, sans-serif',
+            fontSize: 16,
             height: '100%',
             margin: 0,
+            '@media (max-width: 320px)': {
+                fontSize: 14,
+            },
         },
     },
     app: {

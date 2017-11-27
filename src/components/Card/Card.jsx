@@ -24,7 +24,7 @@ class Card extends Component {
     render() {
         const props = this.props;
         const className = classNames(props.classes.card, props.className);
-        console.log('card renderde');
+        console.log('card re-rendered');
         return (
             <div className={className}>
                 {props.children}
@@ -32,7 +32,6 @@ class Card extends Component {
         );
     }
 }
-
 
 
 export default withStyles(styles)(Card);
