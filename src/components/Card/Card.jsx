@@ -18,6 +18,7 @@ const styles = () => ({
 
 const Card = (props) => {
     const className = classNames(props.classes.card, props.className);
+    console.log('card renderde');
     return (
         <div className={className} style={props.style}>
             {props.children}

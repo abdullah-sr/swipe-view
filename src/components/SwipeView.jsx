@@ -9,12 +9,28 @@ import Card, { CardImage, CardBody, CardFooter } from './Card';
 // const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 
+class TestCard extends Component {
+    shouldComponentUpdate(nextProps, nextState){
+        console.log(this.props, nextProps);
+        console.log(this.state, nextState);
+        return false;
+    }
+    render() {
+        console.log('TEST CARD');
+        return (
+            <div>
+                {this.props.children}
+            </div>
+        );
+    }
+}
+
 class SwipeView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             images: [],
-            loading: true,
+            loading: false,
         };
 
         this.styles = {
@@ -53,12 +69,11 @@ class SwipeView extends Component {
             const response = await fetch('https://renthoop-production.appspot.com/_ah/api/renthoopendpoint/v1/potentialroommate/181004659047340?latitude=34.072926&longitude=-118.442986&state=CA&locality=West%20Hollywood&radius=32000.000000');
             const reponseJson = await response.json();
             console.log(reponseJson);
+            const images = [];
             for (const item of reponseJson.items) {
-                this.setState((state) => {
-                    return { images: state.images.concat(`https://graph.facebook.com/${item.potentialRoommate.userID}/picture?width=400&height=400`) };
-                });
+                images.push(`https://graph.facebook.com/${item.potentialRoommate.userID}/picture?width=400&height=400`);
             }
-            this.setState({ loading: false });
+            // this.setState({ loading: false, images });
         } catch (error) {
             console.log(error);
         }
@@ -77,6 +92,13 @@ class SwipeView extends Component {
             ));
     }
 
+    test() {
+        console.log('##############');
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i =>
+            (
+                <TestCard key={i}>{i}</TestCard>
+            ));
+    }
 
     render() {
         if (this.state.loading) {
@@ -85,7 +107,7 @@ class SwipeView extends Component {
         const { swipeViewRoot, swipeViewContainer, slideStyle } = this.styles;
         return (
             <SwipeableViews style={swipeViewRoot} containerStyle={swipeViewContainer} slideStyle={slideStyle}>
-                {this.listItems()}
+                {this.test()}
             </SwipeableViews>
         );
     }
