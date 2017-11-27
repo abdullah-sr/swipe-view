@@ -23,7 +23,7 @@ const config = {
                 use: 'babel-loader',
             },
             {
-                test: /\.(woff|woff2)$/,
+                test: /\.(woff|woff2|eot|ttf)$/,
                 use: [
                     {
                         loader: 'file-loader',

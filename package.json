@@ -42,7 +42,6 @@
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
     "material-ui": "^1.0.0-beta.21",
-    "material-ui-icons": "^1.0.0-beta.17",
     "promise-polyfill": "^6.0.2",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
