@@ -1,11 +1,9 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
-import classNames from 'classnames';
 import SwipeView from './SwipeView';
 
 
 const styles = () => ({
-
     '@global': {
         'html, body': {
             fontFamily: 'Roboto, sans-serif',

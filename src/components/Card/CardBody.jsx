@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 const styles = () => ({
     cardBody: {
+        flex: 3,
         position: 'relative',
         padding: '15px 10px',
         overflow: 'hidden',

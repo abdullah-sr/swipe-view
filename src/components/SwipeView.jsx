@@ -3,7 +3,7 @@ import SwipeableViews from 'react-swipeable-views';
 // import { virtualize } from 'react-swipeable-views-utils';
 import { CircularProgress } from 'material-ui/Progress';
 import { blue } from 'material-ui/colors';
-import Card, { CardImage, CardBody } from './Card';
+import Card, { CardImage, CardBody, CardFooter } from './Card';
 
 
 // const VirtualizeSwipeableViews = virtualize(SwipeableViews);
@@ -72,6 +72,7 @@ class SwipeView extends Component {
                     <CardBody>Hello,
                         I am the cofounder and CTO of RentHoop. Please feel free to swipe right if you would like to
                         provide any feedback about the app or simply say </CardBody>
+                    <CardFooter/>
                 </Card>
             ));
     }

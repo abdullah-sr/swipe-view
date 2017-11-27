@@ -23,6 +23,18 @@ const config = {
                 use: 'babel-loader',
             },
             {
+                test: /\.png$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'images/',
+                        },
+                    },
+                ],
+            },
+            {
                 test: /\.(woff|woff2|eot|ttf)$/,
                 use: [
                     {
@@ -46,9 +58,9 @@ const config = {
             hash: true,
         }),
         new UglifyJsPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production'),
-        }),
+        // new webpack.DefinePlugin({
+        //     'process.env.NODE_ENV': JSON.stringify('production'),
+        // }),
     ],
 };
 

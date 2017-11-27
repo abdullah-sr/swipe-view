@@ -7,15 +7,14 @@ const styles = () => ({
     imageContainer: {
         display: 'flex',
         position: 'relative',
-        height: '60%',
+        flex: 6,
         justifyContent: 'center',
         alignItems: 'end',
         overflow: 'hidden',
-    },
-    cardImage: {
         borderTopLeftRadius: 2,
         borderTopRightRadius: 2,
     },
+    cardImage: {},
     locationOverlay: {
         display: 'flex',
         alignItems: 'center',
@@ -37,7 +36,12 @@ const styles = () => ({
 
 
 const CardImage = (props) => {
-    const { imageContainer, cardImage, locationOverlay, locationIcon } = props.classes;
+    const {
+        imageContainer,
+        cardImage,
+        locationOverlay,
+        locationIcon
+    } = props.classes;
     return (
         <div className={imageContainer}>
             <img className={cardImage} src={props.src} alt="user"/>
