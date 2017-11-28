@@ -22,7 +22,7 @@ function getDealBreakers(list) {
             <DealBreaker
                 key={text}
                 text={text.split(/(?=[A-Z])/).join(" ")}
-                pic={`/images/${text}.png`}
+                pic={`images/${text}.png`}
             />
         );
     });

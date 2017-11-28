@@ -2,14 +2,19 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const VERSION = require('./package.json').version;
 
 const BUILD_DIR = path.resolve(__dirname, './dist');
 const APP_DIR = path.resolve(__dirname, './src');
 
+
+const ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
+const OUTPUT = ENV === 'development' ? `${BUILD_DIR}/${ENV}` : `${BUILD_DIR}/${ENV}/${VERSION}`;
+
 const config = {
     entry: `${APP_DIR}/main.jsx`,
     output: {
-        path: BUILD_DIR,
+        path: OUTPUT,
         filename: 'app.js',
     },
     resolve: {
@@ -61,9 +66,6 @@ const config = {
         new webpack.EnvironmentPlugin({
             NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
         }),
-        // new webpack.DefinePlugin({
-        //     'process.env.NODE_ENV': JSON.stringify('production'),
-        // }),
     ],
 };
 
