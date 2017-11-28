@@ -3,6 +3,7 @@ import SwipeableViews from 'react-swipeable-views';
 // import { virtualize } from 'react-swipeable-views-utils';
 import { CircularProgress } from 'material-ui/Progress';
 import { blue } from 'material-ui/colors';
+import { API_ENDPOINTS } from '../constants';
 import Card, { CardImage, CardBody, CardFooter } from './Card';
 
 
@@ -66,7 +67,7 @@ class SwipeView extends Component {
 
     async fetchData() {
         try {
-            const response = await fetch('https://renthoop-production.appspot.com/_ah/api/renthoopendpoint/v1/potentialroommate/181004659047340?latitude=34.072926&longitude=-118.442986&state=CA&locality=West%20Hollywood&radius=32000.000000');
+            const response = await fetch(`${API_ENDPOINTS.potentialRoommates}${window.location.search}`);
             const reponseJson = await response.json();
             console.log(reponseJson);
             const users = [];
@@ -75,10 +76,15 @@ class SwipeView extends Component {
                 const user = this.constructor.flattenItemObj(item);
                 users.push(user);
             }
+            console.log('hmmmmm');
             this.setState({ loading: false, users });
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async fetchMutualFriends() {
+
     }
 
     listItems() {
@@ -99,7 +105,7 @@ class SwipeView extends Component {
                         type={user.hasPlace ? 'Has a room' : 'Need a room'}
                         hasDealbreakers={dealbreakers.length > 0}
                     />
-                    <CardFooter dealbreakers={dealbreakers} />
+                    <CardFooter dealbreakers={dealbreakers}/>
                 </Card>
             );
         });
