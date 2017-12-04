@@ -6,6 +6,8 @@
   "scripts": {
     "dev:swipe": "cross-env NODE_ENV=development app=swipe ./node_modules/.bin/webpack -d",
     "prod:swipe": "cross-env NODE_ENV=production app=swipe ./node_modules/.bin/webpack",
+    "dev:gallery": "cross-env NODE_ENV=development app=gallery ./node_modules/.bin/webpack -d",
+    "prod:gallery": "cross-env NODE_ENV=production app=gallery ./node_modules/.bin/webpack",
     "patch": "webpack --env.patch",
     "minor": "webpack --env.minor",
     "major": "webpack --env.major",

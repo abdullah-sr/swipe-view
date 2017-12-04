@@ -15,7 +15,7 @@ const config = {
     entry: `${APP_DIR}/main.jsx`,
     output: {
         path: OUTPUT,
-        filename: '[name]/app.js',
+        filename: 'app.js',
     },
     resolve: {
         extensions: ['.js', '.jsx'],
