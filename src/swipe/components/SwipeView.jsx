@@ -4,7 +4,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { CircularProgress } from 'material-ui/Progress';
 import { blue } from 'material-ui/colors';
 import { API_ENDPOINTS } from '../constants';
-import Card, { CardImage, CardBody, CardFooter } from './Card';
+import Card, { CardImage, CardBody, CardFooter } from './Card/index';
 
 
 // const VirtualizeSwipeableViews = virtualize(SwipeableViews);

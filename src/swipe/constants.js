@@ -1,4 +1,4 @@
-import config from '../config';
+import config from '../../config';
 
 function getQueryParams(qs) {
     const params = {};

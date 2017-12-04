@@ -4,18 +4,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const VERSION = require('./package.json').version;
 
+const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
+const APP_ENV = process.env.app ? process.env.app : 'swipe';
+
 const BUILD_DIR = path.resolve(__dirname, './dist');
-const APP_DIR = path.resolve(__dirname, './src');
-
-
-const ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
-const OUTPUT = ENV === 'development' ? `${BUILD_DIR}/${ENV}` : `${BUILD_DIR}/${ENV}/${VERSION}`;
+const APP_DIR = path.resolve(__dirname, `./src/${APP_ENV}`);
+const OUTPUT = NODE_ENV === 'development' ? `${BUILD_DIR}/${NODE_ENV}/${APP_ENV}` : `${BUILD_DIR}/${NODE_ENV}/${VERSION}/${APP_ENV}`;
 
 const config = {
     entry: `${APP_DIR}/main.jsx`,
     output: {
         path: OUTPUT,
-        filename: 'app.js',
+        filename: '[name]/app.js',
     },
     resolve: {
         extensions: ['.js', '.jsx'],
