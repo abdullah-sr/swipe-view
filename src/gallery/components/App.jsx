@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
+import Grid from './Grid';
 
 
 const styles = () => ({
@@ -15,11 +16,7 @@ const styles = () => ({
         },
     },
     app: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-        maxWidth: '600px',
+        maxWidth: 600,
         margin: '0 auto',
         backgroundColor: '#f2f6f5',
     },
@@ -28,8 +25,7 @@ const styles = () => ({
 
 const App = (props) => {
     return (
-        <div className={props.classes.app}>
-        </div>
+        <div className={props.classes.app}><Grid/></div>
     );
 };
 
