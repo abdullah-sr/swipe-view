@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
+import IconButton from 'material-ui/IconButton';
 import Cell from './Cell';
 import UploadImageButton from './UploadImageButton';
 import { API_ENDPOINTS } from '../../constants';
@@ -12,6 +13,12 @@ const styles = () => ({
         width: '100%',
         height: '100%',
         objectFit: 'cover',
+    },
+    deleteIcon: {
+        zIndex: 5,
+        position: 'absolute',
+        left: 0,
+        top: 0,
     },
 });
 
@@ -36,24 +43,15 @@ class Grid extends Component {
         const classes = this.props.classes;
         return (
             <div>
-                <Cell><img className={classes.image}
-                           src="https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg"/></Cell>
-                <Cell><img className={classes.image}
-                           src="https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg"/></Cell>
-                <Cell><img className={classes.image}
-                           src="https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg"/></Cell>
-                <Cell><img className={classes.image}
-                           src="https://farm5.staticflickr.com/4573/23979346767_bb563b1540_b.jpg"/></Cell>
-                <Cell><img className={classes.image}
-                           src="https://farm5.staticflickr.com/4573/23979346767_bb563b1540_b.jpg"/></Cell>
-                <Cell><img className={classes.image}
-                           src="https://farm5.staticflickr.com/4573/23979346767_bb563b1540_b.jpg"/></Cell>
-                <Cell><img className={classes.image}
-                           src="https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg"/></Cell>
-                <Cell><img className={classes.image}
-                           src="https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg"/></Cell>
-                <Cell><img className={classes.image}
-                           src="https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg"/></Cell>
+                <Cell>
+                    <IconButton className={classes.deleteIcon} aria-label="Delete">
+                        <i className="material-icons">delete</i>
+                    </IconButton>
+                    <img
+                        className={classes.image}
+                        src="https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg"/>
+
+                </Cell>
                 <Cell><UploadImageButton/></Cell>
             </div>
         );
