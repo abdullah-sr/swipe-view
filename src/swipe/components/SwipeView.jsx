@@ -3,7 +3,7 @@ import SwipeableViews from 'react-swipeable-views';
 // import { virtualize } from 'react-swipeable-views-utils';
 import { CircularProgress } from 'material-ui/Progress';
 import { blue } from 'material-ui/colors';
-import { API_ENDPOINTS } from '../constants';
+import { API_ENDPOINTS } from '../../constants';
 import Card, { CardImage, CardBody, CardFooter } from './Card/index';
 
 
@@ -76,7 +76,6 @@ class SwipeView extends Component {
                 const user = this.constructor.flattenItemObj(item);
                 users.push(user);
             }
-            console.log('hmmmmm');
             this.setState({ loading: false, users });
         } catch (error) {
             console.log(error);
