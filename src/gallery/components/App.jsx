@@ -16,6 +16,9 @@ const styles = () => ({
         },
     },
     app: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: '100%',
         maxWidth: 600,
         margin: '0 auto',

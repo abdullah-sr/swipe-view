@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
+import { CircularProgress } from 'material-ui/Progress';
+import { blue } from 'material-ui/colors';
 import IconButton from 'material-ui/IconButton';
 import Cell from './Cell';
 import UploadImageButton from './UploadImageButton';
@@ -7,6 +9,10 @@ import { API_ENDPOINTS } from '../../constants';
 
 
 const styles = () => ({
+    grid: {
+        height: '100%',
+        width: '100%',
+    },
     image: {
         borderRadius: 2,
         position: 'absolute',
@@ -29,7 +35,7 @@ class Grid extends Component {
         super(props);
         this.handleFileUpload = this.handleFileUpload.bind(this);
         this.state = {
-            fileInput: null,
+            isFetching: true,
         };
     }
 
@@ -71,6 +77,9 @@ class Grid extends Component {
         try {
             const response = await fetch(`${API_ENDPOINTS.photos(userId)}`);
             const reponseJson = await response.json();
+            this.setState({
+                isFetching: false,
+            });
             console.log(reponseJson);
         } catch (error) {
             console.log(error);
@@ -78,9 +87,12 @@ class Grid extends Component {
     }
 
     render() {
+        if (this.state.isFetching) {
+            return (<CircularProgress size={50} style={{ color: blue[500] }}/>);
+        }
         const classes = this.props.classes;
         return (
-            <div>
+            <div className={classes.grid}>
                 <Cell>
                     <IconButton className={classes.deleteIcon} aria-label="Delete">
                         <i className="material-icons">delete</i>
