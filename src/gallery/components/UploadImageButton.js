@@ -34,7 +34,13 @@ const UploadImageButton = (props) => {
             <label htmlFor="file-upload" className={props.classes.label}>
                 <i className={`material-icons ${props.classes.icon}`}>add_a_photo</i>
             </label>
-            <input id="file-upload" type="file" accept="image/*" className={props.classes.input}/>
+            <input
+                id="file-upload"
+                type="file"
+                accept="image/*"
+                className={props.classes.input}
+                onChange={props.onClickFileUpload}
+            />
         </div>
     );
 };

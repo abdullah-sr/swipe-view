@@ -16,6 +16,7 @@ const styles = () => ({
         },
     },
     app: {
+        height: '100%',
         maxWidth: 600,
         margin: '0 auto',
         backgroundColor: '#f2f6f5',

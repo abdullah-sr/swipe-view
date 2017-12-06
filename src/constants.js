@@ -33,7 +33,7 @@ const API_ENDPOINTS = {
     photos(userId) {
         return `${API_URL}/_ah/api/userinfoendpoint/v1/upload/${userId}`;
     },
-    upload: `${API_URL}/upload`,
+    requestUpload: `${API_URL}/upload`,
 };
 
 export {
