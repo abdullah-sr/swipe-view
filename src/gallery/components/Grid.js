@@ -60,7 +60,6 @@ class Grid extends Component {
             formData.append('files', file);
             formData.append('userId', userId);
             const headers = { 'Content-Type': 'multipart/form-data' };
-            debugger;
             const uploadRsponse = await fetch(requestUploadJson.url, {
                 method: 'POST',
                 body: formData,
