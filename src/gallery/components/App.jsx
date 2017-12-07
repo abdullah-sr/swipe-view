@@ -10,15 +10,13 @@ const styles = () => ({
             fontSize: 16,
             height: '100%',
             margin: 0,
+            backgroundColor: '#f2f6f5',
             '@media (max-width: 320px)': {
                 fontSize: 14,
             },
         },
     },
     app: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
         height: '100%',
         maxWidth: 600,
         margin: '0 auto',
@@ -29,7 +27,9 @@ const styles = () => ({
 
 const App = (props) => {
     return (
-        <div className={props.classes.app}><Grid/></div>
+        <div className={props.classes.app}>
+            <Grid/>
+        </div>
     );
 };
 

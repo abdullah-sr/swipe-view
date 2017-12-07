@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
-import { CircularProgress } from 'material-ui/Progress';
-import { blue } from 'material-ui/colors';
 import IconButton from 'material-ui/IconButton';
 import Cell from './Cell';
 import UploadImageButton from './UploadImageButton';
+import Loader from './Loader';
 import { API_ENDPOINTS } from '../../constants';
 
 
 const styles = () => ({
     grid: {
-        height: '100%',
         width: '100%',
     },
     image: {
@@ -35,6 +33,7 @@ class Grid extends Component {
         super(props);
         this.handleFileUpload = this.handleFileUpload.bind(this);
         this.state = {
+            photos: [],
             isFetching: true,
         };
     }
@@ -59,13 +58,14 @@ class Grid extends Component {
             const formData = new FormData();
             formData.append('files', file);
             formData.append('userId', userId);
-            const headers = { 'Content-Type': 'multipart/form-data' };
             const uploadRsponse = await fetch(requestUploadJson.url, {
                 method: 'POST',
                 body: formData,
-                headers,
             });
             const uploadRsponseJson = await uploadRsponse.json();
+            this.setState({
+                photos: [...this.state.photos, uploadRsponseJson[0].url],
+            });
             console.log(uploadRsponseJson);
         } catch (error) {
             console.log(error);
@@ -79,28 +79,43 @@ class Grid extends Component {
             this.setState({
                 isFetching: false,
             });
+            if (reponseJson.items) {
+                const photos = [];
+                for (const photo of reponseJson.items) {
+                    photos.push(photo.url);
+                }
+                this.setState({ photos });
+            }
             console.log(reponseJson);
         } catch (error) {
             console.log(error);
         }
     }
 
-    render() {
-        if (this.state.isFetching) {
-            return (<CircularProgress size={50} style={{ color: blue[500] }}/>);
-        }
-        const classes = this.props.classes;
-        return (
-            <div className={classes.grid}>
-                <Cell>
-                    <IconButton className={classes.deleteIcon} aria-label="Delete">
+    photosList() {
+        const photos = this.state.photos.map((src) => {
+            return (
+                <Cell key={src}>
+                    <IconButton className={this.props.classes.deleteIcon}>
                         <i className="material-icons">delete</i>
                     </IconButton>
                     <img
-                        className={classes.image}
-                        src="https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg"/>
+                        className={this.props.classes.image}
+                        src={src}/>
 
                 </Cell>
+            );
+        });
+        return photos;
+    }
+
+    render() {
+        if (this.state.isFetching) {
+            return (<Loader/>);
+        }
+        return (
+            <div className={this.props.classes.grid}>
+                {this.photosList()}
                 <Cell><UploadImageButton onClickFileUpload={this.handleFileUpload}/></Cell>
             </div>
         );
