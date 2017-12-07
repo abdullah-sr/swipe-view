@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
+import Dialog from 'material-ui/Dialog';
 import Cell from './Cell';
 import UploadImageButton from './UploadImageButton';
 import Loader from './Loader';
@@ -35,6 +36,8 @@ class Grid extends Component {
         this.state = {
             photos: [],
             isFetching: true,
+            dialog: false,
+            dialogImage: '',
         };
     }
 
@@ -92,6 +95,10 @@ class Grid extends Component {
         }
     }
 
+    toggleDialog(src) {
+        this.setState({ dialog: !this.state.dialog, dialogImage: src });
+    }
+
     photosList() {
         const photos = this.state.photos.map((src) => {
             return (
@@ -100,6 +107,7 @@ class Grid extends Component {
                         <i className="material-icons">delete</i>
                     </IconButton>
                     <img
+                        onClick={e => this.toggleDialog(src)}
                         className={this.props.classes.image}
                         src={src}/>
 
@@ -116,7 +124,14 @@ class Grid extends Component {
         return (
             <div className={this.props.classes.grid}>
                 {this.photosList()}
-                <Cell><UploadImageButton onClickFileUpload={this.handleFileUpload}/></Cell>
+                <Cell>
+                    <UploadImageButton onClickFileUpload={this.handleFileUpload}/>
+                </Cell>
+                <Dialog
+                    open={this.state.dialog}
+                    onRequestClose={this.toggleDialog}>
+                    <img src={this.state.dialogImage}/>
+                </Dialog>
             </div>
         );
     }
