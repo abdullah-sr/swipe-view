@@ -18,6 +18,7 @@ const styles = () => ({
         width: '100%',
         height: '100%',
         objectFit: 'cover',
+        cursor: 'pointer',
     },
     deleteIcon: {
         zIndex: 5,
@@ -33,6 +34,7 @@ class Grid extends Component {
     constructor(props) {
         super(props);
         this.handleFileUpload = this.handleFileUpload.bind(this);
+        this.toggleDialog = this.toggleDialog.bind(this);
         this.state = {
             photos: [],
             isFetching: true,
@@ -107,7 +109,7 @@ class Grid extends Component {
                         <i className="material-icons">delete</i>
                     </IconButton>
                     <img
-                        onClick={e => this.toggleDialog(src)}
+                        onClick={() => this.toggleDialog(src)}
                         className={this.props.classes.image}
                         src={src}/>
 
