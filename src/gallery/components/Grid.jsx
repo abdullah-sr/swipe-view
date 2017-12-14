@@ -104,16 +104,12 @@ class Grid extends Component {
 
     async deletePhoto(uploadId) {
         try {
-            const response = await fetch(`${API_ENDPOINTS.deletePhoto(uploadId)}?userId=${userId}`, {
+            await fetch(`${API_ENDPOINTS.deletePhoto(uploadId)}?userId=${userId}`, {
                 method: 'DELETE',
-                // body: JSON.stringify({ userId }),
             });
-            const reponseJson = await response.json();
-
             this.setState({
                 photos: this.state.photos.filter(photo => !photo.key.name.includes(uploadId))
             });
-            console.log(reponseJson);
         } catch (error) {
             console.log(error);
         }
