@@ -17,10 +17,11 @@ const styles = () => ({
         },
     },
     app: {
-        height: '100%',
+        height: 'calc(100% - 10px)',
         maxWidth: 600,
         margin: '0 auto',
         backgroundColor: '#f2f6f5',
+        padding: 5,
     },
 });
 

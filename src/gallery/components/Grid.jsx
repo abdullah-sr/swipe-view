@@ -5,11 +5,12 @@ import Dialog from 'material-ui/Dialog';
 import Cell from './Cell';
 import UploadImageButton from './UploadImageButton';
 import Loader from './Loader';
+import Uploading from './Uploading';
 import { API_ENDPOINTS } from '../../constants';
 
 
 const styles = () => ({
-    grid: {
+    resposiveWidth: {
         width: '100%',
     },
     image: {
@@ -38,6 +39,7 @@ class Grid extends Component {
         this.state = {
             photos: [],
             isFetching: true,
+            uploading: false,
             dialog: false,
             dialogImage: '',
         };
@@ -58,6 +60,7 @@ class Grid extends Component {
 
     async uploadPhoto(file) {
         try {
+            this.setState({ uploading: true });
             const requestUploadResponse = await fetch(`${API_ENDPOINTS.requestUpload}`);
             const requestUploadJson = await requestUploadResponse.json();
             const formData = new FormData();
@@ -69,10 +72,12 @@ class Grid extends Component {
             });
             const uploadRsponseJson = await uploadRsponse.json();
             this.setState({
-                photos: [...this.state.photos, uploadRsponseJson[0].url],
+                photos: [...this.state.photos, uploadRsponseJson[0]],
+                uploading: false,
             });
             console.log(uploadRsponseJson);
         } catch (error) {
+            this.setState({ uploading: false });
             console.log(error);
         }
     }
@@ -85,11 +90,7 @@ class Grid extends Component {
                 isFetching: false,
             });
             if (reponseJson.items) {
-                const photos = [];
-                for (const photo of reponseJson.items) {
-                    photos.push(photo.url);
-                }
-                this.setState({ photos });
+                this.setState({ photos: reponseJson.items });
             }
             console.log(reponseJson);
         } catch (error) {
@@ -101,17 +102,38 @@ class Grid extends Component {
         this.setState({ dialog: !this.state.dialog, dialogImage: src });
     }
 
+    async deletePhoto(uploadId) {
+        try {
+            const response = await fetch(`${API_ENDPOINTS.deletePhoto(uploadId)}`, {
+                method: 'DELETE',
+                body: JSON.stringify({ userId }),
+            });
+            const reponseJson = await response.json();
+
+            this.setState({
+                photos: this.state.photos.filter(photo => !photo.key.name.includes(uploadId))
+            });
+            console.log(reponseJson);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     photosList() {
-        const photos = this.state.photos.map((src) => {
+        const photos = this.state.photos.map((photo) => {
+            const [uploadId] = photo.key.name.match(/[^\/]*$/);
             return (
-                <Cell key={src}>
-                    <IconButton className={this.props.classes.deleteIcon}>
+                <Cell key={uploadId}>
+                    <IconButton
+                        className={this.props.classes.deleteIcon}
+                        onClick={() => this.deletePhoto(uploadId)}
+                    >
                         <i className="material-icons">delete</i>
                     </IconButton>
                     <img
-                        onClick={() => this.toggleDialog(src)}
+                        onClick={() => this.toggleDialog(photo.url)}
                         className={this.props.classes.image}
-                        src={src}/>
+                        src={photo.url}/>
 
                 </Cell>
             );
@@ -123,8 +145,11 @@ class Grid extends Component {
         if (this.state.isFetching) {
             return (<Loader/>);
         }
+        if (this.state.uploading) {
+            return (<Uploading/>);
+        }
         return (
-            <div className={this.props.classes.grid}>
+            <div className={this.props.classes.resposiveWidth}>
                 {this.photosList()}
                 <Cell>
                     <UploadImageButton onClickFileUpload={this.handleFileUpload}/>
@@ -132,7 +157,7 @@ class Grid extends Component {
                 <Dialog
                     open={this.state.dialog}
                     onRequestClose={this.toggleDialog}>
-                    <img src={this.state.dialogImage}/>
+                    <img className={this.props.classes.resposiveWidth} src={this.state.dialogImage}/>
                 </Dialog>
             </div>
         );

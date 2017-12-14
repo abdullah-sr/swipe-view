@@ -34,6 +34,9 @@ const API_ENDPOINTS = {
         return `${API_URL}/_ah/api/userinfoendpoint/v1/upload/${userId}`;
     },
     requestUpload: `${API_URL}/upload`,
+    deletePhoto(uploadId) {
+        return `${API_URL}/upload/${uploadId}`;
+    },
 };
 
 export {
