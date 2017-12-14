@@ -99,14 +99,14 @@ class Grid extends Component {
     }
 
     toggleDialog(src) {
-        this.setState({ dialog: !this.state.dialog, dialogImage: src });
+        this.setState({ dialog: !this.state.dialog, dialogImage: src || '' });
     }
 
     async deletePhoto(uploadId) {
         try {
-            const response = await fetch(`${API_ENDPOINTS.deletePhoto(uploadId)}`, {
+            const response = await fetch(`${API_ENDPOINTS.deletePhoto(uploadId)}?userId=${userId}`, {
                 method: 'DELETE',
-                body: JSON.stringify({ userId }),
+                // body: JSON.stringify({ userId }),
             });
             const reponseJson = await response.json();
 
@@ -156,7 +156,7 @@ class Grid extends Component {
                 </Cell>
                 <Dialog
                     open={this.state.dialog}
-                    onRequestClose={this.toggleDialog}>
+                    onRequestClose={() => this.toggleDialog()}>
                     <img className={this.props.classes.resposiveWidth} src={this.state.dialogImage}/>
                 </Dialog>
             </div>
