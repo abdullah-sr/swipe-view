@@ -20,7 +20,7 @@ const styles = () => ({
         objectFit: 'cover',
         cursor: 'pointer',
     },
-    deleteIcon: {
+    deleteBtn: {
         zIndex: 5,
         position: 'absolute',
         left: 0,
@@ -35,6 +35,16 @@ const styles = () => ({
         borderRadius: 2,
         zIndex: 5,
         pointerEvents: 'none',
+    },
+    imageDalog: {
+        overflowY: 'inherit',
+    },
+    closeDialogBtn: {
+        position: 'absolute',
+        zIndex: 5,
+        right: -10,
+        top: -40,
+        color: '#fff',
     },
 });
 
@@ -153,7 +163,7 @@ class Grid extends Component {
                 <Cell key={uploadId}>
                     { MY_ID === USER_ID ? (
                         <IconButton
-                            className={this.props.classes.deleteIcon}
+                            className={this.props.classes.deleteBtn}
                             onClick={() => this.deletePhoto(uploadId)}
                         >
                             <i className="material-icons">delete</i>
@@ -194,8 +204,16 @@ class Grid extends Component {
                     ) : ''
                 }
                 <Dialog
+                    classes={{ paper: props.classes.imageDalog }}
                     open={state.dialog}
                     onRequestClose={() => this.toggleDialog()}>
+
+                    <IconButton
+                        className={props.classes.closeDialogBtn}
+                        onClick={() => this.toggleDialog()}
+                    >
+                        <i className={`material-icons`}>close</i>
+                    </IconButton>
                     <img className={props.classes.resposiveWidth} src={state.dialogImage}/>
                 </Dialog>
             </div>
