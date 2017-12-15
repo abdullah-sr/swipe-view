@@ -26,6 +26,16 @@ const styles = () => ({
         left: 0,
         top: 0,
     },
+    deleteOverlay: {
+        position: 'absolute',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        borderRadius: 2,
+        zIndex: 5,
+        pointerEvents: 'none',
+    },
 });
 
 const [, userId] = window.location.search.match(/userId=([^&]*)/);
@@ -88,7 +98,12 @@ class Grid extends Component {
             this.setState({
                 isFetching: false,
             });
-            if (reponseJson.items) {
+            const photos = reponseJson.items;
+            if (photos) {
+                for (const photo of photos) {
+                    // add a new key to each of the photos so we can display a delete indicator when state changes
+                    photo.deleting = false;
+                }
                 this.setState({ photos: reponseJson.items });
             }
             console.log(reponseJson);
@@ -103,13 +118,29 @@ class Grid extends Component {
 
     async deletePhoto(uploadId) {
         try {
+            // change photo 'deleting' state
+            const photos = this.state.photos.map((photo) => {
+                if (photo.key.name.includes(uploadId)) {
+                    return { ...photo, deleting: true };
+                }
+                return photo;
+            });
+            this.setState({ photos });
             await fetch(`${API_ENDPOINTS.deletePhoto(uploadId)}?userId=${userId}`, {
                 method: 'DELETE',
             });
             this.setState({
-                photos: this.state.photos.filter(photo => !photo.key.name.includes(uploadId))
+                photos: photos.filter(photo => !photo.key.name.includes(uploadId))
             });
         } catch (error) {
+            // change photo 'deleting' state
+            const photos = this.state.photos.map((photo) => {
+                if (photo.key.name.includes(uploadId)) {
+                    return { ...photo, deleting: false };
+                }
+                return photo;
+            });
+            this.setState({ photos });
             console.log(error);
         }
     }
@@ -129,6 +160,13 @@ class Grid extends Component {
                         onClick={() => this.toggleDialog(photo.url)}
                         className={this.props.classes.image}
                         src={photo.url}/>
+                    {
+                        photo.deleting ? (
+                            <div className={this.props.classes.deleteOverlay}>
+                                <Loader/>
+                            </div>
+                        ) : ''
+                    }
 
                 </Cell>
             );
