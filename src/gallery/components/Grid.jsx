@@ -5,7 +5,6 @@ import Dialog from 'material-ui/Dialog';
 import Cell from './Cell';
 import UploadImageButton from './UploadImageButton';
 import Loader from './Loader';
-import Uploading from './Uploading';
 import { API_ENDPOINTS } from '../../constants';
 
 
@@ -138,22 +137,20 @@ class Grid extends Component {
     }
 
     render() {
-        if (this.state.isFetching) {
+        const { props, state } = this;
+        if (state.isFetching) {
             return (<Loader/>);
         }
-        if (this.state.uploading) {
-            return (<Uploading/>);
-        }
         return (
-            <div className={this.props.classes.resposiveWidth}>
+            <div className={props.classes.resposiveWidth}>
                 {this.photosList()}
                 <Cell>
-                    <UploadImageButton onClickFileUpload={this.handleFileUpload}/>
+                    <UploadImageButton uploading={state.uploading} onClickFileUpload={this.handleFileUpload}/>
                 </Cell>
                 <Dialog
-                    open={this.state.dialog}
+                    open={state.dialog}
                     onRequestClose={() => this.toggleDialog()}>
-                    <img className={this.props.classes.resposiveWidth} src={this.state.dialogImage}/>
+                    <img className={props.classes.resposiveWidth} src={state.dialogImage}/>
                 </Dialog>
             </div>
         );

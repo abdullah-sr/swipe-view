@@ -1,12 +1,19 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
+import Loader from './Loader';
 
 
 const styles = () => ({
     container: {
+        boxSizing: 'border-box',
         position: 'absolute',
         width: '100%',
         height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        border: '1px solid #ccc',
+        borderRadius: 2,
     },
     input: {
         display: 'none',
@@ -15,12 +22,10 @@ const styles = () => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%',
         width: '100%',
+        height: '100%',
         cursor: 'pointer',
         color: '#888888',
-        border: '1px solid #ccc',
-        borderRadius: 2,
     },
     icon: {
         fontSize: '2.5rem',
@@ -29,6 +34,13 @@ const styles = () => ({
 
 
 const UploadImageButton = (props) => {
+    if (props.uploading) {
+        return (
+            <div className={props.classes.container}>
+                <Loader/>
+            </div>
+        );
+    }
     return (
         <div className={props.classes.container}>
             <label htmlFor="file-upload" className={props.classes.label}>
