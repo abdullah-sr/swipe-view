@@ -38,7 +38,8 @@ const styles = () => ({
     },
 });
 
-const [, userId] = window.location.search.match(/userId=([^&]*)/);
+const [, USER_ID] = window.location.search.match(/userId=([^&]*)/);
+const [, MY_ID] = window.location.search.match(/myId=([^&]*)/);
 
 class Grid extends Component {
     constructor(props) {
@@ -74,7 +75,7 @@ class Grid extends Component {
             const requestUploadJson = await requestUploadResponse.json();
             const formData = new FormData();
             formData.append('files', file);
-            formData.append('userId', userId);
+            formData.append('userId', USER_ID);
             const uploadRsponse = await fetch(requestUploadJson.url, {
                 method: 'POST',
                 body: formData,
@@ -93,7 +94,7 @@ class Grid extends Component {
 
     async fetchPhotos() {
         try {
-            const response = await fetch(`${API_ENDPOINTS.photos(userId)}`);
+            const response = await fetch(`${API_ENDPOINTS.photos(USER_ID)}`);
             const reponseJson = await response.json();
             this.setState({
                 isFetching: false,
@@ -126,7 +127,7 @@ class Grid extends Component {
                 return photo;
             });
             this.setState({ photos });
-            await fetch(`${API_ENDPOINTS.deletePhoto(uploadId)}?userId=${userId}`, {
+            await fetch(`${API_ENDPOINTS.deletePhoto(uploadId)}?userId=${USER_ID}`, {
                 method: 'DELETE',
             });
             this.setState({
@@ -150,12 +151,15 @@ class Grid extends Component {
             const [uploadId] = photo.key.name.match(/[^\/]*$/);
             return (
                 <Cell key={uploadId}>
-                    <IconButton
-                        className={this.props.classes.deleteIcon}
-                        onClick={() => this.deletePhoto(uploadId)}
-                    >
-                        <i className="material-icons">delete</i>
-                    </IconButton>
+                    { MY_ID === USER_ID ? (
+                        <IconButton
+                            className={this.props.classes.deleteIcon}
+                            onClick={() => this.deletePhoto(uploadId)}
+                        >
+                            <i className="material-icons">delete</i>
+                        </IconButton>
+                    ) : ''
+                    }
                     <img
                         onClick={() => this.toggleDialog(photo.url)}
                         className={this.props.classes.image}
@@ -182,9 +186,13 @@ class Grid extends Component {
         return (
             <div className={props.classes.resposiveWidth}>
                 {this.photosList()}
-                <Cell>
-                    <UploadImageButton uploading={state.uploading} onClickFileUpload={this.handleFileUpload}/>
-                </Cell>
+                {
+                    MY_ID === USER_ID ? (
+                        <Cell>
+                            <UploadImageButton uploading={state.uploading} onClickFileUpload={this.handleFileUpload}/>
+                        </Cell>
+                    ) : ''
+                }
                 <Dialog
                     open={state.dialog}
                     onRequestClose={() => this.toggleDialog()}>
