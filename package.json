@@ -5,14 +5,13 @@
   "main": "main.js",
   "scripts": {
     "dev:swipe": "cross-env NODE_ENV=development app=swipe ./node_modules/.bin/webpack -d",
-    "prod:swipe": "cross-env NODE_ENV=production app=swipe ./node_modules/.bin/webpack",
+    "prestart": "cross-env NODE_ENV=production app=swipe ./node_modules/.bin/webpack; cross-env NODE_ENV=production app=gallery ./node_modules/.bin/webpack",
     "dev:gallery": "cross-env NODE_ENV=development app=gallery ./node_modules/.bin/webpack -d",
-    "prod:gallery": "cross-env NODE_ENV=production app=gallery ./node_modules/.bin/webpack",
     "patch": "webpack --env.patch",
     "minor": "webpack --env.minor",
     "major": "webpack --env.major",
     "server-dev": "./node_modules/.bin/http-server ./dist/development",
-    "server-prod": "./node_modules/.bin/http-server -p 80 -d false ./dist/production"
+    "start": "./node_modules/.bin/http-server -p 8081 -d false ./dist/production"
   },
   "author": "",
   "license": "",
