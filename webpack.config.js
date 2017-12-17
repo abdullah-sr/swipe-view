@@ -62,6 +62,11 @@ const config = {
             template: `${APP_DIR}/index.html`,
             hash: true,
         }),
+        new HtmlWebpackPlugin({
+            filename: '../../health.html',
+            template: path.resolve(APP_DIR, '../health.html'),
+            inject: false,
+        }),
         new UglifyJsPlugin(),
         new webpack.EnvironmentPlugin({
             NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
