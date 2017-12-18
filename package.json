@@ -52,6 +52,7 @@
     "react-swipeable-views": "^0.12.12",
     "react-swipeable-views-core": "^0.12.11",
     "react-swipeable-views-utils": "^0.12.11",
+    "typeface-overpass": "0.0.44",
     "typeface-roboto": "0.0.45",
     "warning": "^3.0.0",
     "whatwg-fetch": "^2.0.3"

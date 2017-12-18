@@ -6,7 +6,7 @@ import SwipeView from './SwipeView';
 const styles = () => ({
     '@global': {
         'html, body': {
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: 'roboto, sans-serif',
             fontSize: 16,
             height: '100%',
             margin: 0,

@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import SwipeableViews from 'react-swipeable-views';
-// import { virtualize } from 'react-swipeable-views-utils';
 import { CircularProgress } from 'material-ui/Progress';
 import { blue } from 'material-ui/colors';
 import { API_ENDPOINTS } from '../../constants';
-import Card, { CardImage, CardBody, CardFooter } from './Card/index';
-
-
-// const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+import Card from './Card/index';
 
 
 class SwipeView extends Component {
@@ -23,9 +19,6 @@ class SwipeView extends Component {
         return age.getUTCFullYear() - 1970;
     }
 
-    static getDealbreakers(user) {
-        return Object.keys(user).filter(key => key.startsWith('okWith') && user[key] === false);
-    }
 
     constructor(props) {
         super(props);
@@ -57,14 +50,6 @@ class SwipeView extends Component {
     }
 
 
-    // slideRenderer({ key, index }) {
-    //     //console.log(key, index);
-    //     return (
-    //
-    //         <Slide key={key} index={index}/>
-    //     );
-    // }
-
     async fetchData() {
         try {
             const response = await fetch(`${API_ENDPOINTS.potentialRoommates}${window.location.search}`);
@@ -88,24 +73,21 @@ class SwipeView extends Component {
 
     listItems() {
         return this.state.users.map((user) => {
-            const location = user.roommatePreferenceType && user.school != null ? user.school : user.locality;
-            const dealbreakers = this.constructor.getDealbreakers(user);
             return (
-                <Card key={user.userID}>
-                    <CardImage
-                        src={`https://graph.facebook.com/${user.userID}/picture?width=400&height=400`}
-                        location={location}
-                        new={!user.hasSeen}
-                    />
-                    <CardBody
-                        name={`${user.firstName} ${user.lastName}, ${this.constructor.calculateAge(user.birthDate)}`}
-                        bio={user.aboutMe.length < 220 ? user.aboutMe : `${user.aboutMe.slice(0, 220)}...`}
-                        rent={`$${user.budget} ${(user.hasPlace ? 'rent' : 'budget')}`}
-                        type={user.hasPlace ? 'Has a room' : 'Need a room'}
-                        hasDealbreakers={dealbreakers.length > 0}
-                    />
-                    <CardFooter dealbreakers={dealbreakers}/>
-                </Card>
+                <Card
+                    key={user.userID}
+                    src={`https://graph.facebook.com/${user.userID}/picture?width=400&height=400`}
+                    location={`${user.locality}, ${user.state}`}
+                    school={user.school || ''}
+                    new={!user.hasSeen}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
+                    age={this.constructor.calculateAge(user.birthDate)}
+                    bio={user.aboutMe.length < 220 ? user.aboutMe : `${user.aboutMe.slice(0, 220)}...`}
+                    rent={`$${user.budget}`}
+                    type={user.hasPlace ? 'Has a room' : 'Needs a room'}
+                />
+
             );
         });
     }

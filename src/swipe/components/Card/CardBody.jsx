@@ -51,9 +51,7 @@ const CardBody = (props) => {
         name,
         typeContainer,
         type,
-        dealbreakerText,
     } = props.classes;
-    const dealbreakers = props.hasDealbreakers? <div className={dealbreakerText}>Dealbreakers</div>: '';
     return (
         <div className={cardBody}>
             <div className={nameContainer}>
@@ -66,7 +64,6 @@ const CardBody = (props) => {
                 </div>
             </div>
             {props.bio}
-            {dealbreakers}
         </div>
     );
 };
