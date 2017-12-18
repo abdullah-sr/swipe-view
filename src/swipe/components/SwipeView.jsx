@@ -38,8 +38,9 @@ class SwipeView extends Component {
             slideStyle: {
                 display: 'flex',
                 justifyContent: 'center',
-                padding: 10,
-                width: 'calc(100% - 20px)',
+                // padding: 10,
+                // width: 'calc(100% - 20px)',
+                width: 'calc(100%)',
             },
         };
 
