@@ -10,7 +10,7 @@ const styles = () => ({
         flexDirection: 'column',
         boxShadow: '0 5px 8px rgba(0, 0, 0, 0.19), 0 1px 3px rgba(0, 0, 0, 0.23)',
         backgroundColor: '#FFFFFF',
-        borderRadius: '2px',
+        // borderRadius: '2px',
         width: '100%',
         color: '#0072d0',
     },
