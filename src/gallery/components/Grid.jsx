@@ -161,7 +161,7 @@ class Grid extends Component {
             const [uploadId] = photo.key.name.match(/[^\/]*$/);
             return (
                 <Cell key={uploadId}>
-                    { MY_ID === USER_ID ? (
+                    {MY_ID === USER_ID ? (
                         <IconButton
                             className={this.props.classes.deleteBtn}
                             onClick={() => this.deletePhoto(uploadId)}
@@ -206,13 +206,13 @@ class Grid extends Component {
                 <Dialog
                     classes={{ paper: props.classes.imageDalog }}
                     open={state.dialog}
-                    onRequestClose={() => this.toggleDialog()}>
+                    onClose={() => this.toggleDialog()}>
 
                     <IconButton
                         className={props.classes.closeDialogBtn}
                         onClick={() => this.toggleDialog()}
                     >
-                        <i className={`material-icons`}>close</i>
+                        <i className="material-icons">close</i>
                     </IconButton>
                     <img className={props.classes.resposiveWidth} src={state.dialogImage}/>
                 </Dialog>
