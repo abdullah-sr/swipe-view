@@ -87,12 +87,17 @@ const styles = () => ({
     bio: {
         fontSize: '.9rem',
     },
-    type: {
+    imageOverlay: {
         display: 'flex',
         flexDirection: 'column',
         position: 'absolute',
-        right: 15,
         bottom: 5,
+        '&.right': {
+            right: 15,
+        },
+        '&.left': {
+            left: 15,
+        },
     },
     label: {
         backgroundColor: 'rgba(255, 255, 255, 0.85)',
@@ -120,6 +125,11 @@ const styles = () => ({
 
 class Card extends Component {
     shouldComponentUpdate(nextProps, nextState) {
+        const { mutualFriendsCount, mutualLikesCount } = this.props;
+        // return true if counts are different
+        if (mutualFriendsCount !== nextProps.mutualFriendsCount || mutualLikesCount !== nextProps.mutualLikesCount) {
+            return true;
+        }
         return false;
     }
 
@@ -134,9 +144,25 @@ class Card extends Component {
                 </div>
                 <div className={classes.imageContainer}>
                     <img src={props.src}/>
-                    <div className={classes.type}>
+                    <div className={`${classes.imageOverlay} right`}>
                         <div className={classes.label}>{props.rent}</div>
                         <div className={classes.label}>{props.type}</div>
+                    </div>
+                    <div className={`${classes.imageOverlay} left`}>
+                        {props.mutualFriendsCount ?
+                            <div
+                                className={classes.label}
+                            >
+                                {`${props.mutualFriendsCount} mutual friend${props.mutualFriendsCount > 1 ? 's' : ''}`}
+                            </div> : ''
+                        }
+                        {props.mutualLikesCount ?
+                            <div
+                                className={classes.label}
+                            >
+                                {`${props.mutualLikesCount} mutual likes${props.mutualLikesCount > 1 ? 's' : ''}`}
+                            </div> : ''
+                        }
                     </div>
                 </div>
                 <div className={classes.cardBody}>

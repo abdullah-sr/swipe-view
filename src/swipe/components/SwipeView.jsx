@@ -10,7 +10,12 @@ class SwipeView extends Component {
     static flattenItemObj(item) {
         const { potentialRoommate, ...other } = item;
         other.distance = other.distance.distance;
-        return { ...potentialRoommate, ...other };
+        return {
+            ...potentialRoommate,
+            ...other,
+            mutualFriendsCount: 0,
+            mutualLikesCount: 0,
+        };
     }
 
     static calculateAge(d) {
@@ -53,20 +58,46 @@ class SwipeView extends Component {
             const response = await fetch(`${API_ENDPOINTS.potentialRoommates}${window.location.search}`);
             const reponseJson = await response.json();
             console.log(reponseJson);
-            const users = [];
-            for (const item of reponseJson.items) {
-                // users.push(`https://graph.facebook.com/${item.potentialRoommate.userID}/picture?width=400&height=400`);
+            const users = reponseJson.items.map((item, index) => {
                 const user = this.constructor.flattenItemObj(item);
-                users.push(user);
-            }
+                this.fetchMutualFriends(user.userID, index);
+                this.fetchMutualLikes(user.userID, index);
+                return user;
+            });
             this.setState({ loading: false, users });
         } catch (error) {
             console.log(error);
         }
     }
 
-    async fetchMutualFriends() {
+    async fetchMutualFriends(userId, userIndex) {
+        try {
+            const response = await fetch(`${API_ENDPOINTS.mutualFriends(userId)}`);
+            const reponseJson = await response.json();
+            const mutualFriends = reponseJson.context.all_mutual_friends;
+            if (mutualFriends) {
+                const users = [...this.state.users];
+                users[userIndex].mutualFriendsCount = mutualFriends.summary.total_count;
+                this.setState({ users });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
+    async fetchMutualLikes(userId, userIndex) {
+        try {
+            const response = await fetch(`${API_ENDPOINTS.mutualLikes(userId)}`);
+            const reponseJson = await response.json();
+            const mutualLikes = reponseJson.context.mutual_likes;
+            if (mutualLikes) {
+                const users = [...this.state.users];
+                users[userIndex].mutualLikesCount = mutualLikes.summary.total_count;
+                this.setState({ users });
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     listItems() {
@@ -87,6 +118,8 @@ class SwipeView extends Component {
                     type={user.hasPlace ? 'Has a room' : 'Needs a room'}
                     cardIndex={index + 1}
                     totalCards={totalCard}
+                    mutualFriendsCount={user.mutualFriendsCount}
+                    mutualLikesCount={user.mutualLikesCount}
                 />
 
             );
