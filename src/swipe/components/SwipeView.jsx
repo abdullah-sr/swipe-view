@@ -38,20 +38,17 @@ class SwipeView extends Component {
             slideStyle: {
                 display: 'flex',
                 justifyContent: 'center',
-                // padding: 10,
-                // width: 'calc(100% - 20px)',
-                width: 'calc(100%)',
+                width: '100%',
+                borderRight: 'solid 1px #ddd',
+                boxSizing: 'border-box',
             },
         };
 
         this.listItems = this.listItems.bind(this);
-        // this.slideRenderer = this.slideRenderer.bind(this);
-
-        this.fetchData();
+        this.fetchUsersData();
     }
 
-
-    async fetchData() {
+    async fetchUsersData() {
         try {
             const response = await fetch(`${API_ENDPOINTS.potentialRoommates}${window.location.search}`);
             const reponseJson = await response.json();
@@ -73,7 +70,8 @@ class SwipeView extends Component {
     }
 
     listItems() {
-        return this.state.users.map((user) => {
+        const totalCard = this.state.users.length;
+        return this.state.users.map((user, index) => {
             return (
                 <Card
                     key={user.userID}
@@ -87,6 +85,8 @@ class SwipeView extends Component {
                     bio={user.aboutMe.length < 220 ? user.aboutMe : `${user.aboutMe.slice(0, 220)}...`}
                     rent={`$${user.budget}`}
                     type={user.hasPlace ? 'Has a room' : 'Needs a room'}
+                    cardIndex={index + 1}
+                    totalCards={totalCard}
                 />
 
             );

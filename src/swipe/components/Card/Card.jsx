@@ -36,6 +36,13 @@ const styles = () => ({
         padding: 15,
         position: 'relative',
     },
+    footer: {
+        display: 'flex',
+        borderTop: 'solid 1px #ddd',
+        padding: 15,
+        justifyContent: 'center',
+        position: 'relative',
+    },
     location: {
         display: 'flex',
         flexDirection: 'column',
@@ -98,6 +105,16 @@ const styles = () => ({
         minHeight: 0,
         textAlign: 'center',
     },
+    page: {
+        fontSize: '.9rem',
+        color: 'rgb(155, 174, 200)',
+    },
+    filterButton: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        color: 'rgb(155, 174, 200)',
+    },
 });
 
 
@@ -139,6 +156,12 @@ class Card extends Component {
                             {`Message ${props.firstName}`}
                         </Button>
                     </div>
+                </div>
+                <div className={classes.footer}>
+                    <IconButton className={classes.filterButton}>
+                        <i className="material-icons">filter_list</i>
+                    </IconButton>
+                    <div className={classes.page}>{props.cardIndex}/{props.totalCards}</div>
                 </div>
             </div>
         );
