@@ -10,6 +10,7 @@ const styles = () => ({
             fontSize: 16,
             height: '100%',
             margin: 0,
+            backgroundColor: '#eaeaea',
             '@media (max-width: 320px)': {
                 fontSize: 14,
             },
@@ -30,7 +31,7 @@ const styles = () => ({
 const App = (props) => {
     return (
         <div className={props.classes.app}>
-            <SwipeView />
+            <SwipeView/>
         </div>
     );
 };
