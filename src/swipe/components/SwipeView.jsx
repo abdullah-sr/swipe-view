@@ -1,10 +1,38 @@
 import React, { Component } from 'react';
+import { withStyles } from 'material-ui/styles';
 import SwipeableViews from 'react-swipeable-views';
 import { CircularProgress } from 'material-ui/Progress';
 import { blue } from 'material-ui/colors';
-import { API_ENDPOINTS } from '../../constants';
+import IconButton from 'material-ui/IconButton';
 import Card from './Card/index';
+import { API_ENDPOINTS } from '../../constants';
 
+const styles = () => ({
+    container: {
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    footer: {
+        display: 'flex',
+        borderTop: 'solid 1px #ddd',
+        padding: 15,
+        justifyContent: 'center',
+        position: 'relative',
+        backgroundColor: '#fff',
+    },
+    filterButton: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        color: 'rgb(155, 174, 200)',
+    },
+    page: {
+        fontSize: '.9rem',
+        color: 'rgb(155, 174, 200)',
+    },
+});
 
 class SwipeView extends Component {
     static flattenItemObj(item) {
@@ -30,12 +58,13 @@ class SwipeView extends Component {
         this.state = {
             users: [],
             loading: true,
+            currentPage: 0,
+            totalPages: 0,
         };
 
-        this.styles = {
+        this.swipeStyles = {
             swipeViewRoot: {
                 height: '100%',
-                boxShadow: '0 5px 8px rgba(0, 0, 0, 0.19), 0 1px 3px rgba(0, 0, 0, 0.23)',
             },
             swipeViewContainer: {
                 height: '100%',
@@ -44,13 +73,17 @@ class SwipeView extends Component {
                 display: 'flex',
                 justifyContent: 'center',
                 width: '100%',
-                borderRight: 'solid 1px #ddd',
-                boxSizing: 'border-box',
+                // borderRight: 'solid 1px #ddd',
+                // boxSizing: 'border-box',
             },
         };
 
-        this.listItems = this.listItems.bind(this);
+        this.onChangeIndex = this.onChangeIndex.bind(this);
         this.fetchUsersData();
+    }
+
+    onChangeIndex(index) {
+        this.setState({ currentPage: index + 1 });
     }
 
     async fetchUsersData() {
@@ -64,7 +97,7 @@ class SwipeView extends Component {
                 this.fetchMutualLikes(user.userID, index);
                 return user;
             });
-            this.setState({ loading: false, users });
+            this.setState({ loading: false, users, currentPage: 1, totalPages: users.length });
         } catch (error) {
             console.log(error);
         }
@@ -101,8 +134,7 @@ class SwipeView extends Component {
     }
 
     listItems() {
-        const totalCard = this.state.users.length;
-        return this.state.users.map((user, index) => {
+        return this.state.users.map((user) => {
             return (
                 <Card
                     key={user.userID}
@@ -116,28 +148,40 @@ class SwipeView extends Component {
                     bio={user.aboutMe.length < 220 ? user.aboutMe : `${user.aboutMe.slice(0, 220)}...`}
                     rent={`$${user.budget}`}
                     type={user.hasPlace ? 'Has a room' : 'Needs a room'}
-                    cardIndex={index + 1}
-                    totalCards={totalCard}
                     mutualFriendsCount={user.mutualFriendsCount}
                     mutualLikesCount={user.mutualLikesCount}
                 />
-
             );
         });
     }
 
 
     render() {
-        if (this.state.loading) {
+        const { props, state } = this;
+        const { classes } = props;
+        if (state.loading) {
             return (<CircularProgress size={50} style={{ color: blue[500] }}/>);
         }
-        const { swipeViewRoot, swipeViewContainer, slideStyle } = this.styles;
+        const { swipeViewRoot, swipeViewContainer, slideStyle } = this.swipeStyles;
         return (
-            <SwipeableViews style={swipeViewRoot} containerStyle={swipeViewContainer} slideStyle={slideStyle}>
-                {this.listItems()}
-            </SwipeableViews>
+            <div className={classes.container}>
+                <SwipeableViews
+                    style={swipeViewRoot}
+                    containerStyle={swipeViewContainer}
+                    slideStyle={slideStyle}
+                    onChangeIndex={this.onChangeIndex}
+                >
+                    {this.listItems()}
+                </SwipeableViews>
+                <div className={classes.footer}>
+                    <IconButton className={classes.filterButton}>
+                        <i className="material-icons">filter_list</i>
+                    </IconButton>
+                    <div className={classes.page}>{state.currentPage}/{state.totalPages}</div>
+                </div>
+            </div>
         );
     }
 }
 
-export default SwipeView;
+export default withStyles(styles)(SwipeView);
