@@ -16,7 +16,7 @@ const styles = () => ({
     },
     name: {
         fontSize: '1.25rem',
-        padding: '10px 15px 6px',
+        padding: '10px 15px',
         fontWeight: 600,
     },
     imageContainer: {
@@ -87,6 +87,7 @@ const styles = () => ({
         bottom: 5,
         '&.right': {
             right: 15,
+            fontWeight: 500,
         },
         '&.left': {
             left: 15,
@@ -99,7 +100,6 @@ const styles = () => ({
         marginBottom: 5,
         fontSize: '.875rem',
         color: 'rgb(0, 114, 208)',
-        fontWeight: 400,
         minHeight: 0,
         textAlign: 'center',
     },
@@ -150,7 +150,7 @@ class Card extends Component {
                 </div>
                 <div className={classes.cardBody}>
                     <IconButton className={classes.favoriteButton}>
-                        <i className="material-icons">star_border</i>
+                        <img src="images/star.svg"/>
                     </IconButton>
                     <div className={classes.location}>
                         <div>{props.school}</div>
