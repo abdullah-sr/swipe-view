@@ -27,6 +27,10 @@ const styles = () => ({
         left: 0,
         top: 0,
         color: 'rgb(155, 174, 200)',
+        '& img': {
+            height: 18,
+            width: 18,
+        },
     },
     page: {
         fontSize: '.9rem',
@@ -175,7 +179,11 @@ class SwipeView extends Component {
                 </SwipeableViews>
                 <div className={classes.footer}>
                     <IconButton className={classes.filterButton}>
-                        <i className="material-icons">filter_list</i>
+                        <img
+                            src="images/bluefilter.png"
+                            srcset="images/bluefilter@2x.png 2x,
+                                    images/bluefilter@3x.png 3x"
+                        />
                     </IconButton>
                     <div className={classes.page}>{state.currentPage}/{state.totalPages}</div>
                 </div>
