@@ -1,7 +1,14 @@
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
+import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
 import SwipeView from './SwipeView';
 
+
+const theme = createMuiTheme({
+    typography: {
+        // Use the system font.
+        fontFamily: 'overpass',
+    },
+});
 
 const styles = () => ({
     '@global': {
@@ -13,6 +20,14 @@ const styles = () => ({
             backgroundColor: '#eaeaea',
             '@media (max-width: 320px)': {
                 fontSize: 14,
+            },
+        },
+        '.overpass': {
+            '&-3': {
+                marginBottom: -3,
+            },
+            '&-4': {
+                marginBottom: -4,
             },
         },
     },
@@ -30,9 +45,11 @@ const styles = () => ({
 
 const App = (props) => {
     return (
-        <div className={props.classes.app}>
-            <SwipeView/>
-        </div>
+        <MuiThemeProvider theme={theme}>
+            <div className={props.classes.app}>
+                <SwipeView/>
+            </div>
+        </MuiThemeProvider>
     );
 };
 

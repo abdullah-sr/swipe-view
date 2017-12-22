@@ -16,8 +16,8 @@ const styles = () => ({
     },
     name: {
         fontSize: '1.25rem',
-        padding: '10px 15px',
-        fontWeight: 600,
+        padding: '7px 15px',
+        fontWeight: 700,
     },
     imageContainer: {
         position: 'relative',
@@ -55,6 +55,7 @@ const styles = () => ({
         borderRadius: 2,
         textTransform: 'none',
         width: '80%',
+        fontSize: '1rem',
     },
     viewProfileBtn: {
         backgroundColor: 'rgba(242, 242, 242, 0.65) !important',
@@ -87,7 +88,7 @@ const styles = () => ({
         bottom: 5,
         '&.right': {
             right: 15,
-            fontWeight: 500,
+            fontWeight: 600,
         },
         '&.left': {
             left: 15,
@@ -123,27 +124,33 @@ class Card extends Component {
         return (
             <div className={classes.card}>
                 <div className={classes.name}>
-                    {`${props.firstName} ${props.lastName}, ${props.age}`}
+                    <div className="overpass-4">{`${props.firstName} ${props.lastName}, ${props.age}`}</div>
                 </div>
                 <div className={classes.imageContainer}>
                     <img src={props.src}/>
                     <div className={`${classes.imageOverlay} right`}>
-                        <div className={classes.label}>{props.rent}</div>
-                        <div className={classes.label}>{props.type}</div>
+                        <div className={classes.label}>
+                            <div className="overpass-3">{props.rent}</div>
+                        </div>
+                        <div className={classes.label}>
+                            <div className="overpass-3">{props.type}</div>
+                        </div>
                     </div>
                     <div className={`${classes.imageOverlay} left`}>
                         {props.mutualFriendsCount ?
                             <div
                                 className={classes.label}
                             >
-                                {`${props.mutualFriendsCount} mutual friend${props.mutualFriendsCount > 1 ? 's' : ''}`}
+                                <div
+                                    className="overpass-3"> {`${props.mutualFriendsCount} mutual friend${props.mutualFriendsCount > 1 ? 's' : ''}`}</div>
                             </div> : ''
                         }
                         {props.mutualLikesCount ?
                             <div
                                 className={classes.label}
                             >
-                                {`${props.mutualLikesCount} mutual likes${props.mutualLikesCount > 1 ? 's' : ''}`}
+                                <div
+                                    className="overpass-3">{`${props.mutualLikesCount} mutual likes${props.mutualLikesCount > 1 ? 's' : ''}`}</div>
                             </div> : ''
                         }
                     </div>
@@ -160,9 +167,11 @@ class Card extends Component {
                         {props.bio}
                     </div>
                     <div className={classes.actions}>
-                        <Button className={classes.viewProfileBtn}>View Profile</Button>
+                        <Button className={classes.viewProfileBtn}>
+                            <div className="overpass-3">View Profile</div>
+                        </Button>
                         <Button className={classes.messageButton}>
-                            {`Message ${props.firstName}`}
+                            <div className="overpass-3">{`Message ${props.firstName}`}</div>
                         </Button>
                     </div>
                 </div>

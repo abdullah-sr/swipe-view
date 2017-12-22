@@ -181,7 +181,7 @@ class SwipeView extends Component {
                     <IconButton className={classes.filterButton}>
                         <img
                             src="images/bluefilter.png"
-                            srcset="images/bluefilter@2x.png 2x,
+                            srcSet="images/bluefilter@2x.png 2x,
                                     images/bluefilter@3x.png 3x"
                         />
                     </IconButton>
