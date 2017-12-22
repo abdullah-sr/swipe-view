@@ -15,6 +15,8 @@ const styles = () => ({
         color: '#0072d0',
     },
     name: {
+        display: 'flex',
+        justifyContent: 'space-between',
         fontSize: '1.25rem',
         padding: '7px 15px',
         fontWeight: 700,
@@ -101,8 +103,15 @@ const styles = () => ({
         marginBottom: 5,
         fontSize: '.875rem',
         color: 'rgb(0, 114, 208)',
-        minHeight: 0,
         textAlign: 'center',
+    },
+    newLabel: {
+        backgroundColor: 'rgba(241, 241, 241, 0.65)',
+        padding: '2px 8px',
+        borderRadius: 10,
+        fontSize: '.875rem',
+        fontWeight: 400,
+        color: '#88c346',
     },
 });
 
@@ -125,6 +134,9 @@ class Card extends Component {
             <div className={classes.card}>
                 <div className={classes.name}>
                     <div className="overpass-4">{`${props.firstName} ${props.lastName}, ${props.age}`}</div>
+                    {props.new ? <div className={classes.newLabel}>
+                        <div className="overpass-3">New</div>
+                    </div> : ''}
                 </div>
                 <div className={classes.imageContainer}>
                     <img src={props.src}/>
