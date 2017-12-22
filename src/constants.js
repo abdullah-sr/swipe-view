@@ -21,6 +21,9 @@ const API_ENDPOINTS = {
     dislike(userId) {
         return `${API_URL}/_ah/api/swipedendpoint/v1/dislikedinfo/${CURRENT_USER}/${userId}`;
     },
+    unfavor(userId) {
+        return `${API_URL}/_ah/api/swipedendpoint/v1/unFavorUser/${CURRENT_USER}/${userId}`;
+    },
     userImage(userId) {
         return `https://graph.facebook.com/${userId}/picture?width=400&height=400`;
     },

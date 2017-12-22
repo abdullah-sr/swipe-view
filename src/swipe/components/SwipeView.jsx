@@ -47,6 +47,7 @@ class SwipeView extends Component {
             ...other,
             mutualFriendsCount: 0,
             mutualLikesCount: 0,
+            favored: false,
         };
     }
 
@@ -97,6 +98,7 @@ class SwipeView extends Component {
             console.log(reponseJson);
             const users = reponseJson.items.map((item, index) => {
                 const user = this.constructor.flattenItemObj(item);
+                // this could lade before user component mounts
                 this.fetchMutualFriends(user.userID, index);
                 this.fetchMutualLikes(user.userID, index);
                 return user;
@@ -137,8 +139,54 @@ class SwipeView extends Component {
         }
     }
 
+    async likeUser(userId, userIndex) {
+        const users = [...this.state.users];
+        users[userIndex].favored = true;
+        this.setState({ users });
+        try {
+            const response = await fetch(`${API_ENDPOINTS.like(userId)}`, {
+                method: 'POST',
+            });
+            if (response.status !== 200) {
+                throw new Error('Unable to favor user');
+            }
+        } catch (error) {
+            users[userIndex].favored = false;
+            this.setState({ users });
+            console.log(error);
+        }
+    }
+
+    async unlikeUser(userId, userIndex) {
+        const users = [...this.state.users];
+        users[userIndex].favored = false;
+        this.setState({ users });
+        try {
+            const response = await fetch(`${API_ENDPOINTS.unfavor(userId)}`, {
+                method: 'POST',
+            });
+            if (response.status !== 200) {
+                throw new Error('Unable to unfavor user');
+            }
+        } catch (error) {
+            users[userIndex].favored = true;
+            this.setState({ users });
+            console.log(error);
+        }
+    }
+
+    toggleFavor(userId, userIndex) {
+        return () => {
+            if (this.state.users[userIndex].favored) {
+                this.unlikeUser(userId, userIndex);
+            } else {
+                this.likeUser(userId, userIndex);
+            }
+        };
+    }
+
     listItems() {
-        return this.state.users.map((user) => {
+        return this.state.users.map((user, index) => {
             return (
                 <Card
                     key={user.userID}
@@ -155,6 +203,8 @@ class SwipeView extends Component {
                     type={user.hasPlace ? 'Has a room' : 'Needs a room'}
                     mutualFriendsCount={user.mutualFriendsCount}
                     mutualLikesCount={user.mutualLikesCount}
+                    favored={user.favored}
+                    onClickLike={this.toggleFavor(user.userID, index)}
                 />
             );
         });

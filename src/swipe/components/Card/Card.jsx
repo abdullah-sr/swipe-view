@@ -118,9 +118,16 @@ const styles = () => ({
 
 class Card extends Component {
     shouldComponentUpdate(nextProps, nextState) {
-        const { mutualFriendsCount, mutualLikesCount } = this.props;
+        const {
+            mutualFriendsCount,
+            mutualLikesCount,
+            favored,
+        } = this.props;
         // return true if counts are different
-        if (mutualFriendsCount !== nextProps.mutualFriendsCount || mutualLikesCount !== nextProps.mutualLikesCount) {
+        if (mutualFriendsCount !== nextProps.mutualFriendsCount ||
+            mutualLikesCount !== nextProps.mutualLikesCount ||
+            favored !== nextProps.mutualLikesCount
+        ) {
             return true;
         }
         return false;
@@ -168,8 +175,19 @@ class Card extends Component {
                     </div>
                 </div>
                 <div className={classes.cardBody}>
-                    <IconButton className={classes.favoriteButton}>
-                        <img src="images/star.svg"/>
+                    <IconButton
+                        className={classes.favoriteButton}
+                        onClick={props.onClickLike}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="25" viewBox="0 0 26 25">
+                            <path
+                                fill={props.favored ? '#6DAEE4' : 'none'}
+                                fillRule="evenodd"
+                                stroke="#6DAEE4"
+                                strokeWidth="2"
+                                d="M12.557 19.993l-6.512 3.423a.5.5 0 0 1-.726-.527l1.244-7.251a.5.5 0 0 0-.144-.443L1.151 10.06a.5.5 0 0 1 .277-.853l7.28-1.057a.5.5 0 0 0 .377-.274l3.256-6.597a.5.5 0 0 1 .897 0l3.256 6.597a.5.5 0 0 0 .376.274l7.28 1.057a.5.5 0 0 1 .278.853l-5.269 5.135a.5.5 0 0 0-.143.443l1.243 7.251a.5.5 0 0 1-.725.527l-6.512-3.423a.5.5 0 0 0-.465 0z"/>
+                        </svg>
+
                     </IconButton>
                     <div className={classes.location}>
                         <div>{props.school}</div>
