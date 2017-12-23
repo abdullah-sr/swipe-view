@@ -106,6 +106,8 @@ const styles = () => ({
         textAlign: 'center',
     },
     newLabel: {
+        display: 'flex',
+        alignItems: 'center',
         backgroundColor: 'rgba(241, 241, 241, 0.65)',
         padding: '2px 8px',
         borderRadius: 10,
