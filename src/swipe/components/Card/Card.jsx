@@ -109,7 +109,7 @@ const styles = () => ({
         backgroundColor: 'rgba(241, 241, 241, 0.65)',
         padding: '2px 8px',
         borderRadius: 10,
-        fontSize: '.875rem',
+        fontSize: '.9rem',
         fontWeight: 400,
         color: '#88c346',
     },
@@ -126,7 +126,7 @@ class Card extends Component {
         // return true if counts are different
         if (mutualFriendsCount !== nextProps.mutualFriendsCount ||
             mutualLikesCount !== nextProps.mutualLikesCount ||
-            favored !== nextProps.mutualLikesCount
+            favored !== nextProps.favored
         ) {
             return true;
         }

@@ -175,12 +175,12 @@ class SwipeView extends Component {
         }
     }
 
-    toggleFavor(userId, userIndex) {
+    toggleFavor(uuid, userIndex) {
         return () => {
             if (this.state.users[userIndex].favored) {
-                this.unlikeUser(userId, userIndex);
+                this.unlikeUser(uuid, userIndex);
             } else {
-                this.likeUser(userId, userIndex);
+                this.likeUser(uuid, userIndex);
             }
         };
     }
@@ -189,7 +189,7 @@ class SwipeView extends Component {
         return this.state.users.map((user, index) => {
             return (
                 <Card
-                    key={user.userID}
+                    key={user.uuid}
                     src={`https://graph.facebook.com/${user.userID}/picture?width=400&height=400`}
                     location={`${user.locality}, ${user.state}`}
                     school={user.school || ''}
@@ -204,7 +204,7 @@ class SwipeView extends Component {
                     mutualFriendsCount={user.mutualFriendsCount}
                     mutualLikesCount={user.mutualLikesCount}
                     favored={user.favored}
-                    onClickLike={this.toggleFavor(user.userID, index)}
+                    onClickLike={this.toggleFavor(user.uuid, index)}
                 />
             );
         });
