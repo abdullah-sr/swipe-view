@@ -16,6 +16,7 @@ const styles = () => ({
     },
     name: {
         display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
         fontSize: '1.25rem',
         padding: '7px 15px',
@@ -108,8 +109,9 @@ const styles = () => ({
     newLabel: {
         display: 'flex',
         alignItems: 'center',
+        height: 22,
         backgroundColor: 'rgba(241, 241, 241, 0.65)',
-        padding: '2px 8px',
+        padding: '0 10px',
         borderRadius: 10,
         fontSize: '.9rem',
         fontWeight: 400,
