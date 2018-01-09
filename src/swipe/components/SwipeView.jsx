@@ -13,6 +13,8 @@ const styles = () => ({
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
+        color: '#9baec8',
+        fontSize: '.9rem',
     },
     footer: {
         display: 'flex',
@@ -22,9 +24,16 @@ const styles = () => ({
         position: 'relative',
         backgroundColor: '#fff',
     },
+    location: {
+        display: 'flex',
+        alignItems: 'center',
+        position: 'absolute',
+        left: 5,
+        color: 'rgb(155, 174, 200)',
+    },
     filterButton: {
         position: 'absolute',
-        left: 0,
+        right: 0,
         top: 0,
         color: 'rgb(155, 174, 200)',
         '& img': {
@@ -34,7 +43,6 @@ const styles = () => ({
     },
     page: {
         fontSize: '.9rem',
-        color: 'rgb(155, 174, 200)',
     },
 });
 
@@ -65,6 +73,7 @@ class SwipeView extends Component {
             loading: true,
             currentPage: 0,
             totalPages: 0,
+            currentUserLocation: '',
         };
 
         this.swipeStyles = {
@@ -88,7 +97,7 @@ class SwipeView extends Component {
     }
 
     onChangeIndex(index) {
-        this.setState({ currentPage: index + 1 });
+        this.setState({ currentPage: index + 1, currentUserLocation: this.state.users[index].locality });
     }
 
     async fetchUsersData() {
@@ -103,7 +112,13 @@ class SwipeView extends Component {
                 this.fetchMutualLikes(user.userID, index);
                 return user;
             });
-            this.setState({ loading: false, users, currentPage: 1, totalPages: users.length });
+            this.setState({
+                loading: false,
+                users,
+                currentPage: 1,
+                totalPages: users.length,
+                currentUserLocation: users[0].locality,
+            });
         } catch (error) {
             console.log(error);
         }
@@ -229,6 +244,16 @@ class SwipeView extends Component {
                     {this.listItems()}
                 </SwipeableViews>
                 <div className={classes.footer}>
+                    <div className={classes.location}>
+                        <svg fill="#9baec8" height="20" viewBox="0 0 24 24" width="20"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                        </svg>
+                        {state.currentUserLocation}
+                    </div>
+                    <div className={classes.page}>{state.currentPage}/{state.totalPages}</div>
                     <IconButton className={classes.filterButton}>
                         <img
                             src="images/bluefilter.png"
@@ -236,7 +261,6 @@ class SwipeView extends Component {
                                     images/bluefilter@3x.png 3x"
                         />
                     </IconButton>
-                    <div className={classes.page}>{state.currentPage}/{state.totalPages}</div>
                 </div>
             </div>
         );

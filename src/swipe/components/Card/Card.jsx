@@ -12,7 +12,7 @@ const styles = () => ({
         backgroundColor: '#FFFFFF',
         // borderRadius: '2px',
         width: '100%',
-        color: '#0072d0',
+        color: '#292929',
     },
     name: {
         display: 'flex',
@@ -44,6 +44,10 @@ const styles = () => ({
         flexDirection: 'column',
         marginBottom: 5,
         fontWeight: 600,
+        fontSize: '1rem',
+        '& div:nth-child(2)': {
+            fontWeight: 400,
+        },
     },
     actions: {
         display: 'flex',
@@ -53,12 +57,15 @@ const styles = () => ({
         marginTop: 'auto',
     },
     messageButton: {
-        color: 'inherit',
-        border: '1px solid rgb(109, 174, 228)',
+        color: '#fff',
+        backgroundColor: '#0072d0',
         borderRadius: 2,
         textTransform: 'none',
         width: '80%',
         fontSize: '1rem',
+        '&:hover': {
+            backgroundColor: '#2786d0',
+        },
     },
     viewProfileBtn: {
         backgroundColor: 'rgba(242, 242, 242, 0.65) !important',
@@ -66,7 +73,7 @@ const styles = () => ({
         padding: '5px 10px',
         marginBottom: 10,
         fontSize: '.8rem',
-        color: 'inherit',
+        color: '#4b82b0',
         textTransform: 'none',
         fontWeight: 400,
         minHeight: 0,
@@ -144,37 +151,29 @@ class Card extends Component {
         return (
             <div className={classes.card}>
                 <div className={classes.name}>
-                    <div className="overpass-4">{`${props.firstName} ${props.lastName}, ${props.age}`}</div>
-                    {props.new ? <div className={classes.newLabel}>
-                        <div className="overpass-3">New</div>
-                    </div> : ''}
+                    {`${props.firstName} ${props.lastName}, ${props.age}`}
+                    {props.new && <div className={classes.newLabel}>New</div>}
                 </div>
                 <div className={classes.imageContainer}>
                     <img src={props.src}/>
                     <div className={`${classes.imageOverlay} right`}>
                         <div className={classes.label}>
-                            <div className="overpass-3">{props.rent}</div>
+                            {props.rent}
                         </div>
                         <div className={classes.label}>
-                            <div className="overpass-3">{props.type}</div>
+                            {props.type}
                         </div>
                     </div>
                     <div className={`${classes.imageOverlay} left`}>
-                        {props.mutualFriendsCount ?
-                            <div
-                                className={classes.label}
-                            >
-                                <div
-                                    className="overpass-3"> {`${props.mutualFriendsCount} mutual friend${props.mutualFriendsCount > 1 ? 's' : ''}`}</div>
-                            </div> : ''
+                        {props.mutualFriendsCount.length > 0 &&
+                        <div className={classes.label}>
+                            {`${props.mutualFriendsCount} mutual friend${props.mutualFriendsCount > 1 ? 's' : ''}`}
+                        </div>
                         }
-                        {props.mutualLikesCount ?
-                            <div
-                                className={classes.label}
-                            >
-                                <div
-                                    className="overpass-3">{`${props.mutualLikesCount} mutual likes${props.mutualLikesCount > 1 ? 's' : ''}`}</div>
-                            </div> : ''
+                        {props.mutualLikesCount > 0 &&
+                        <div className={classes.label}>
+                            {`${props.mutualLikesCount} mutual likes${props.mutualLikesCount > 1 ? 's' : ''}`}
+                        </div>
                         }
                     </div>
                 </div>
@@ -191,21 +190,20 @@ class Card extends Component {
                                 strokeWidth="2"
                                 d="M12.557 19.993l-6.512 3.423a.5.5 0 0 1-.726-.527l1.244-7.251a.5.5 0 0 0-.144-.443L1.151 10.06a.5.5 0 0 1 .277-.853l7.28-1.057a.5.5 0 0 0 .377-.274l3.256-6.597a.5.5 0 0 1 .897 0l3.256 6.597a.5.5 0 0 0 .376.274l7.28 1.057a.5.5 0 0 1 .278.853l-5.269 5.135a.5.5 0 0 0-.143.443l1.243 7.251a.5.5 0 0 1-.725.527l-6.512-3.423a.5.5 0 0 0-.465 0z"/>
                         </svg>
-
                     </IconButton>
                     <div className={classes.location}>
-                        <div>{props.school}</div>
-                        <div>{props.location}</div>
+                        {props.school && <div>{props.school}</div>}
+                        {props.location && <div>{props.location}</div>}
                     </div>
                     <div className={classes.bio}>
                         {props.bio}
                     </div>
                     <div className={classes.actions}>
                         <Button className={classes.viewProfileBtn}>
-                            <div className="overpass-3">View Profile</div>
+                            View Profile
                         </Button>
                         <Button className={classes.messageButton}>
-                            <div className="overpass-3">{`Message ${props.firstName}`}</div>
+                            {`Message ${props.firstName}`}
                         </Button>
                     </div>
                 </div>
