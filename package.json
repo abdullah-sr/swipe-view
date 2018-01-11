@@ -44,6 +44,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
+    "dsbridge": "^2.0.0",
     "material-ui": "^1.0.0-beta.24",
     "promise-polyfill": "^6.1.0",
     "prop-types": "^15.6.0",

@@ -199,10 +199,10 @@ class Card extends Component {
                         {props.bio}
                     </div>
                     <div className={classes.actions}>
-                        <Button className={classes.viewProfileBtn}>
+                        <Button className={classes.viewProfileBtn} onClick={props.onClickViewProfile}>
                             View Profile
                         </Button>
-                        <Button className={classes.messageButton}>
+                        <Button className={classes.messageButton} onClick={props.onClickMessageBtn}>
                             {`Message ${props.firstName}`}
                         </Button>
                     </div>

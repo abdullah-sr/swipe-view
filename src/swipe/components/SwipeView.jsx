@@ -7,6 +7,8 @@ import IconButton from 'material-ui/IconButton';
 import Card from './Card/index';
 import { API_ENDPOINTS } from '../../constants';
 
+const dsBridge = require('dsbridge');
+
 const styles = () => ({
     container: {
         height: '100%',
@@ -63,6 +65,14 @@ class SwipeView extends Component {
         const diff = Date.now() - new Date(d);
         const age = new Date(diff);
         return age.getUTCFullYear() - 1970;
+    }
+
+    static callNative(name, arg) {
+        try {
+            dsBridge.call(name, arg);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
@@ -154,50 +164,64 @@ class SwipeView extends Component {
         }
     }
 
-    async likeUser(userId, userIndex) {
+    async likeUser(userIndex) {
         const users = [...this.state.users];
-        users[userIndex].favored = true;
+        const user = users[userIndex];
+        user.favored = true;
+        // call native method
+        this.constructor.callNative('favor', user);
         this.setState({ users });
         try {
-            const response = await fetch(`${API_ENDPOINTS.like(userId)}`, {
+            const response = await fetch(`${API_ENDPOINTS.like(user.uuid)}`, {
                 method: 'POST',
             });
             if (response.status !== 200) {
                 throw new Error('Unable to favor user');
             }
         } catch (error) {
-            users[userIndex].favored = false;
+            user.favored = false;
             this.setState({ users });
             console.log(error);
         }
     }
 
-    async unlikeUser(userId, userIndex) {
+    async unlikeUser(userIndex) {
         const users = [...this.state.users];
-        users[userIndex].favored = false;
+        const user = users[userIndex];
+        user.favored = false;
         this.setState({ users });
         try {
-            const response = await fetch(`${API_ENDPOINTS.unfavor(userId)}`, {
+            const response = await fetch(`${API_ENDPOINTS.unfavor(user.uuid)}`, {
                 method: 'POST',
             });
             if (response.status !== 200) {
                 throw new Error('Unable to unfavor user');
             }
         } catch (error) {
-            users[userIndex].favored = true;
+            user.favored = true;
             this.setState({ users });
             console.log(error);
         }
     }
 
-    toggleFavor(uuid, userIndex) {
+    toggleFavor(userIndex) {
         return () => {
             if (this.state.users[userIndex].favored) {
-                this.unlikeUser(uuid, userIndex);
+                this.unlikeUser(userIndex);
             } else {
-                this.likeUser(uuid, userIndex);
+                this.likeUser(userIndex);
             }
         };
+    }
+
+    onClickViewProfile(user) {
+        // call native method
+        this.constructor.callNative('viewProfile', user);
+    }
+
+    onClickMessageBtn(user) {
+        // call native method
+        this.constructor.callNative('messageUser', user);
     }
 
     listItems() {
@@ -213,13 +237,14 @@ class SwipeView extends Component {
                     lastName={user.lastName}
                     age={this.constructor.calculateAge(user.birthDate)}
                     bio={user.aboutMe.length < 220 ? user.aboutMe : `${user.aboutMe.slice(0, 220)}...`}
-                    new={!user.hasSeen}
                     rent={`$${user.budget}`}
                     type={user.hasPlace ? 'Has a room' : 'Needs a room'}
                     mutualFriendsCount={user.mutualFriendsCount}
                     mutualLikesCount={user.mutualLikesCount}
                     favored={user.favored}
-                    onClickLike={this.toggleFavor(user.uuid, index)}
+                    onClickLike={this.toggleFavor(index)}
+                    onClickViewProfile={this.onClickViewProfile(user)}
+                    onClickMessageBtn={this.onClickMessageBtn(user)}
                 />
             );
         });
