@@ -75,6 +75,39 @@ class SwipeView extends Component {
         }
     }
 
+    static diffInDays(dt) {
+        let oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+        return Math.round((dt - new Date()) / (oneDay));
+    }
+
+    static buildMixPanelObj(user) {
+        const lastSeenDays = Math.abs(this.constructor.diffInDays(new Date(user.lastSeen)));
+        return {
+            $potential_roommate_uuid: user.uuid,
+            $need_roommate_by: user.needRoommateBy,
+            $need_roommate_by_days: this.constructor.diffInDays(new Date(user.needRoommateBy)),
+            $desired_lease_length: user.leaseDuration,
+            $gender: user.gender,
+            $age: this.constructor.calculateAge(user.birthDate),
+            $has_place: user.hasPlace,
+            //$roommate_dealbreakers_set: getDealBreakers(user).length >= 1,
+            $budget_difference: user.differenceInBudget,
+            $is_disliked: user.iDisliked,
+            $about_charaters: user.aboutMe,
+            $potential_roommate_id: user.userID,
+            $potential_roommate_city: user.locality,
+            $position_in_deck: user.positionInDeck,
+            $last_seen_days: lastSeenDays,
+            $last_seen_minutes: lastSeenDays * 24 * 60,
+            $mutual_friends: user.mutualFriendsCount || 0,
+            $mutual_interests: user.mutualLikesCount || 0,
+            $school: user.school,
+            $class_year: user.schoolYear,
+            $distance: user.distance,
+            $roommate_preference: user.roommatePreferenceType,
+        };
+    }
+
 
     constructor(props) {
         super(props);
@@ -103,11 +136,19 @@ class SwipeView extends Component {
         };
 
         this.onChangeIndex = this.onChangeIndex.bind(this);
+        this.onClickFilter = this.onClickFilter.bind(this);
         this.fetchUsersData();
     }
 
     onChangeIndex(index) {
-        this.setState({ currentPage: index + 1, currentUserLocation: this.state.users[index].locality });
+        const user = this.state.users[index];
+        // swiped right
+        if (index > this.state.currentPage) {
+            this.constructor.callNative('trackEvent', { event: 'SwipeRight', ...this.constructor.buildMixPanelObj(user) });
+        } else if (index < this.state.currentPage) {
+            this.constructor.callNative('trackEvent', { event: 'SwipeLeft', ...this.constructor.buildMixPanelObj(user) });
+        }
+        this.setState({ currentPage: index + 1, currentUserLocation: user.locality });
     }
 
     async fetchUsersData() {
@@ -169,7 +210,7 @@ class SwipeView extends Component {
         const user = users[userIndex];
         user.favored = true;
         // call native method
-        this.constructor.callNative('favor', user);
+        this.constructor.callNative('favor', { $user_id: user.uuid });
         this.setState({ users });
         try {
             const response = await fetch(`${API_ENDPOINTS.like(user.uuid)}`, {
@@ -216,12 +257,16 @@ class SwipeView extends Component {
 
     onClickViewProfile(user) {
         // call native method
-        this.constructor.callNative('viewProfile', user);
+        return () => this.constructor.callNative('viewProfile', user);
     }
 
     onClickMessageBtn(user) {
         // call native method
-        this.constructor.callNative('messageUser', user);
+        return () => this.constructor.callNative('messageUser', { $user_id: user.uuid });
+    }
+
+    onClickFilter() {
+        this.constructor.callNative('filter', {});
     }
 
     listItems() {
@@ -279,7 +324,10 @@ class SwipeView extends Component {
                         {state.currentUserLocation}
                     </div>
                     <div className={classes.page}>{state.currentPage}/{state.totalPages}</div>
-                    <IconButton className={classes.filterButton}>
+                    <IconButton
+                        className={classes.filterButton}
+                        onClick={this.onClickFilter}
+                    >
                         <img
                             src="images/bluefilter.png"
                             srcSet="images/bluefilter@2x.png 2x,
