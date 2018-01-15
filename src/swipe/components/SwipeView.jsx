@@ -114,7 +114,7 @@ class SwipeView extends Component {
         this.state = {
             users: [],
             loading: true,
-            currentPage: 0,
+            currentPageIndex: 0,
             totalPages: 0,
             currentUserLocation: '',
         };
@@ -137,18 +137,19 @@ class SwipeView extends Component {
 
         this.onChangeIndex = this.onChangeIndex.bind(this);
         this.onClickFilter = this.onClickFilter.bind(this);
+        this.constructor.buildMixPanelObj = this.constructor.buildMixPanelObj.bind(this);
         this.fetchUsersData();
     }
 
     onChangeIndex(index) {
         const user = this.state.users[index];
         // swiped right
-        if (index > this.state.currentPage) {
+        if (index > this.state.currentPageIndex) {
             this.constructor.callNative('trackEvent', { event: 'SwipeRight', ...this.constructor.buildMixPanelObj(user) });
-        } else if (index < this.state.currentPage) {
+        } else if (index < this.state.currentPageIndex) {
             this.constructor.callNative('trackEvent', { event: 'SwipeLeft', ...this.constructor.buildMixPanelObj(user) });
         }
-        this.setState({ currentPage: index + 1, currentUserLocation: user.locality });
+        this.setState({ currentPageIndex: index, currentUserLocation: user.locality });
     }
 
     async fetchUsersData() {
@@ -166,7 +167,7 @@ class SwipeView extends Component {
             this.setState({
                 loading: false,
                 users,
-                currentPage: 1,
+                currentPageIndex: 0,
                 totalPages: users.length,
                 currentUserLocation: users[0].locality,
             });
@@ -323,7 +324,7 @@ class SwipeView extends Component {
                         </svg>
                         {state.currentUserLocation}
                     </div>
-                    <div className={classes.page}>{state.currentPage}/{state.totalPages}</div>
+                    <div className={classes.page}>{state.currentPageIndex + 1}/{state.totalPages}</div>
                     <IconButton
                         className={classes.filterButton}
                         onClick={this.onClickFilter}
