@@ -20,7 +20,7 @@ const styles = () => ({
     },
     footer: {
         display: 'flex',
-        borderTop: 'solid 1px #ddd',
+        borderTop: 'solid 1px #F2F2F2',
         padding: 15,
         justifyContent: 'center',
         position: 'relative',
@@ -30,14 +30,15 @@ const styles = () => ({
         display: 'flex',
         alignItems: 'center',
         position: 'absolute',
-        left: 5,
-        color: 'rgb(155, 174, 200)',
+        left: 7,
+        color: '#9BAEC8',
+        fontWeight: 200,
     },
     filterButton: {
         position: 'absolute',
         right: 0,
         top: 0,
-        color: 'rgb(155, 174, 200)',
+        color: '#9BAEC8',
         '& img': {
             height: 18,
             width: 18,
@@ -45,6 +46,7 @@ const styles = () => ({
     },
     page: {
         fontSize: '.9rem',
+        fontWeight: 400,
     },
 });
 

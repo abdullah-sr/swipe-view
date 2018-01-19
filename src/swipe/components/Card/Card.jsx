@@ -18,9 +18,9 @@ const styles = () => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        fontSize: '1.25rem',
-        padding: '7px 15px',
-        fontWeight: 700,
+        fontSize: '1.69rem',
+        padding: '5px 15px',
+        fontWeight: 600,
     },
     imageContainer: {
         position: 'relative',
@@ -36,7 +36,7 @@ const styles = () => ({
         display: 'flex',
         flex: 1,
         flexDirection: 'column',
-        padding: 15,
+        padding: 10,
         position: 'relative',
     },
     location: {
@@ -44,7 +44,7 @@ const styles = () => ({
         flexDirection: 'column',
         marginBottom: 5,
         fontWeight: 600,
-        fontSize: '1rem',
+        fontSize: '1.125rem',
         '& div:nth-child(2)': {
             fontWeight: 400,
         },
@@ -59,20 +59,22 @@ const styles = () => ({
     messageButton: {
         color: '#fff',
         backgroundColor: '#0072d0',
-        borderRadius: 2,
+        borderRadius: 5,
         textTransform: 'none',
+        padding: '9px 9px',
         width: '80%',
-        fontSize: '1rem',
+        fontSize: '1.1rem',
+        fontWeight: 400,
         '&:hover': {
             backgroundColor: '#2786d0',
         },
     },
     viewProfileBtn: {
-        backgroundColor: 'rgba(242, 242, 242, 0.65) !important',
+        backgroundColor: 'rgba(242, 242, 242, 0.7) !important',
         borderRadius: 10,
         padding: '5px 10px',
         marginBottom: 10,
-        fontSize: '.8rem',
+        fontSize: '0.9rem',
         color: '#4b82b0',
         textTransform: 'none',
         fontWeight: 400,
@@ -90,6 +92,7 @@ const styles = () => ({
     },
     bio: {
         fontSize: '.9rem',
+        fontWeight: 300,
     },
     imageOverlay: {
         display: 'flex',
@@ -98,18 +101,19 @@ const styles = () => ({
         bottom: 5,
         '&.right': {
             right: 15,
-            fontWeight: 600,
+            fontWeight: 400,
         },
         '&.left': {
             left: 15,
+            fontWeight: 400,
         },
     },
     label: {
-        backgroundColor: 'rgba(255, 255, 255, 0.85)',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
         borderRadius: 10,
-        padding: '4px 8px',
+        padding: '2px 6px',
         marginBottom: 5,
-        fontSize: '.875rem',
+        fontSize: '1rem',
         color: 'rgb(0, 114, 208)',
         textAlign: 'center',
     },
@@ -151,7 +155,7 @@ class Card extends Component {
         return (
             <div className={classes.card}>
                 <div className={classes.name}>
-                    {`${props.firstName} ${props.lastName}, ${props.age}`}
+                    {`${props.firstName}, ${props.age}`}
                     {props.new && <div className={classes.newLabel}>New</div>}
                 </div>
                 <div className={classes.imageContainer}>
