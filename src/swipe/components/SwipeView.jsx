@@ -27,7 +27,8 @@ const styles = () => ({
         backgroundColor: '#fff',
     },
     location: {
-        display: 'flex',
+        // display: 'flex',
+        display: 'none',
         alignItems: 'center',
         position: 'absolute',
         left: 7,
