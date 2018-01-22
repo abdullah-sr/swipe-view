@@ -30,7 +30,7 @@ const styles = () => ({
         height: '100%',
         maxWidth: '600px',
         margin: '0 auto',
-        backgroundColor: '#f2f6f5',
+        backgroundColor: '#ffffff',
     },
 });
 
