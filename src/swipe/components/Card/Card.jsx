@@ -42,11 +42,12 @@ const styles = () => ({
     location: {
         display: 'flex',
         flexDirection: 'column',
-        marginBottom: 5,
+        marginBottom: 3,
         fontWeight: 600,
         fontSize: '1.125rem',
         '& div:nth-child(2)': {
             fontWeight: 400,
+            fontSize: '1rem',
         },
     },
     actions: {
