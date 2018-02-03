@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
+import React, {Component} from 'react';
+import {withStyles} from 'material-ui/styles';
 import SwipeableViews from 'react-swipeable-views';
-import { CircularProgress } from 'material-ui/Progress';
-import { blue } from 'material-ui/colors';
+import {CircularProgress} from 'material-ui/Progress';
+import {blue} from 'material-ui/colors';
+import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
-import Card from './Card/index';
-import { API_ENDPOINTS } from '../../constants';
+import Card from './Card';
+import {API_ENDPOINTS} from '../../constants';
 
+const [, USER_ID, FACEBOOK_ID] = window.location.search.match(/userId=([^&]*).*facebookid=([^&]*)/);
 const dsBridge = require('dsbridge');
 
 const styles = () => ({
@@ -49,11 +51,42 @@ const styles = () => ({
         fontSize: '.9rem',
         fontWeight: 400,
     },
+    emptyView: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        width: '100%',
+        height: '100%',
+        '& img': {
+            borderRadius: '50%',
+            width: '25%',
+            border: '2px solid #9c9c9c',
+            marginTop: 'auto',
+            marginBottom: 70,
+        },
+    },
+    blueButton: {
+        color: '#fff',
+        backgroundColor: '#0072d0',
+        borderRadius: 5,
+        textTransform: 'none',
+        padding: '0',
+        width: '80%',
+        fontSize: '0.9rem',
+        fontWeight: 400,
+        marginBottom: 15,
+        minHeight: 28,
+        '&:hover': {
+            backgroundColor: '#2786d0',
+        },
+    },
 });
 
 class SwipeView extends Component {
     static flattenItemObj(item) {
-        const { potentialRoommate, ...other } = item;
+        const {potentialRoommate, ...other} = item;
         other.distance = other.distance.distance;
         return {
             ...potentialRoommate,
@@ -138,8 +171,10 @@ class SwipeView extends Component {
             },
         };
 
+        this.fetchUsersData = this.fetchUsersData.bind(this);
         this.onChangeIndex = this.onChangeIndex.bind(this);
         this.onClickFilter = this.onClickFilter.bind(this);
+        this.onClickFeedback = this.onClickFeedback.bind(this);
         this.constructor.buildMixPanelObj = this.constructor.buildMixPanelObj.bind(this);
         this.fetchUsersData();
     }
@@ -148,15 +183,16 @@ class SwipeView extends Component {
         const user = this.state.users[index];
         // swiped right
         if (index > this.state.currentPageIndex) {
-            this.constructor.callNative('trackEvent', { event: 'SwipeRight', ...this.constructor.buildMixPanelObj(user) });
+            this.constructor.callNative('trackEvent', {event: 'SwipeRight', ...this.constructor.buildMixPanelObj(user)});
         } else if (index < this.state.currentPageIndex) {
-            this.constructor.callNative('trackEvent', { event: 'SwipeLeft', ...this.constructor.buildMixPanelObj(user) });
+            this.constructor.callNative('trackEvent', {event: 'SwipeLeft', ...this.constructor.buildMixPanelObj(user)});
         }
-        this.setState({ currentPageIndex: index, currentUserLocation: user.locality });
+        this.setState({currentPageIndex: index, currentUserLocation: user.locality});
     }
 
     async fetchUsersData() {
         try {
+            this.setState({loading: true});
             const response = await fetch(`${API_ENDPOINTS.potentialRoommates}${window.location.search}`);
             const reponseJson = await response.json();
             console.log(reponseJson);
@@ -187,7 +223,7 @@ class SwipeView extends Component {
             if (mutualFriends) {
                 const users = [...this.state.users];
                 users[userIndex].mutualFriendsCount = mutualFriends.summary.total_count;
-                this.setState({ users });
+                this.setState({users});
             }
         } catch (error) {
             console.log(error);
@@ -202,7 +238,7 @@ class SwipeView extends Component {
             if (mutualLikes) {
                 const users = [...this.state.users];
                 users[userIndex].mutualLikesCount = mutualLikes.summary.total_count;
-                this.setState({ users });
+                this.setState({users});
             }
         } catch (error) {
             console.log(error);
@@ -214,8 +250,8 @@ class SwipeView extends Component {
         const user = users[userIndex];
         user.favored = true;
         // call native method
-        this.constructor.callNative('favor', { $user_id: user.uuid });
-        this.setState({ users });
+        this.constructor.callNative('favor', {$user_id: user.uuid});
+        this.setState({users});
         try {
             const response = await fetch(`${API_ENDPOINTS.like(user.uuid)}`, {
                 method: 'POST',
@@ -225,7 +261,7 @@ class SwipeView extends Component {
             }
         } catch (error) {
             user.favored = false;
-            this.setState({ users });
+            this.setState({users});
             console.log(error);
         }
     }
@@ -234,7 +270,7 @@ class SwipeView extends Component {
         const users = [...this.state.users];
         const user = users[userIndex];
         user.favored = false;
-        this.setState({ users });
+        this.setState({users});
         try {
             const response = await fetch(`${API_ENDPOINTS.unfavor(user.uuid)}`, {
                 method: 'POST',
@@ -244,7 +280,7 @@ class SwipeView extends Component {
             }
         } catch (error) {
             user.favored = true;
-            this.setState({ users });
+            this.setState({users});
             console.log(error);
         }
     }
@@ -266,11 +302,15 @@ class SwipeView extends Component {
 
     onClickMessageBtn(user) {
         // call native method
-        return () => this.constructor.callNative('messageUser', { $user_id: user.uuid });
+        return () => this.constructor.callNative('messageUser', {$user_id: user.uuid});
     }
 
     onClickFilter() {
         this.constructor.callNative('filter', {});
+    }
+
+    onClickFeedback() {
+        this.constructor.callNative('feedbackButton', {});
     }
 
     listItems() {
@@ -278,7 +318,7 @@ class SwipeView extends Component {
             return (
                 <Card
                     key={user.uuid}
-                    src={`https://graph.facebook.com/${user.userID}/picture?width=400&height=400`}
+                    src={API_ENDPOINTS.userImage(user.userID)}
                     location={`${user.locality}, ${user.state}`}
                     school={user.school || ''}
                     new={!user.hasSeen}
@@ -301,12 +341,32 @@ class SwipeView extends Component {
 
 
     render() {
-        const { props, state } = this;
-        const { classes } = props;
+        const {props, state} = this;
+        const {classes} = props;
         if (state.loading) {
-            return (<CircularProgress size={50} style={{ color: blue[500] }}/>);
+            return (<CircularProgress size={50} style={{color: blue[500]}}/>);
+        } else if (state.users.length === 0) {
+            return (
+                <div className={classes.emptyView}>
+                    <img src={API_ENDPOINTS.userImage(FACEBOOK_ID)}/>
+                    <div style={{marginTop: 'auto', width: '100%'}}>
+                        <div style={{marginBottom: 20}}>
+                            That's everyone in your area
+                        </div>
+                            <Button className={classes.blueButton} onclick={this.onClickFilter}>
+                                Adjust Filters
+                            </Button>
+                            <Button className={classes.blueButton} onClick={this.fetchUsersData}>
+                                Scan Again
+                            </Button>
+                            <Button className={classes.blueButton} onClick={this.onClickFeedback}>
+                                Why can't you find a roommate?
+                            </Button>
+                    </div>
+                </div>
+            );
         }
-        const { swipeViewRoot, swipeViewContainer, slideStyle } = this.swipeStyles;
+        const {swipeViewRoot, swipeViewContainer, slideStyle} = this.swipeStyles;
         return (
             <div className={classes.container}>
                 <SwipeableViews
