@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {withStyles} from 'material-ui/styles';
+import React, { Component } from 'react';
+import { withStyles } from 'material-ui/styles';
 import SwipeableViews from 'react-swipeable-views';
-import {CircularProgress} from 'material-ui/Progress';
-import {blue} from 'material-ui/colors';
+import { CircularProgress } from 'material-ui/Progress';
+import { blue } from 'material-ui/colors';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import Card from './Card';
-import {API_ENDPOINTS} from '../../constants';
+import { API_ENDPOINTS } from '../../constants';
 
 const [, USER_ID, FACEBOOK_ID] = window.location.search.match(/userId=([^&]*).*facebookid=([^&]*)/);
 const dsBridge = require('dsbridge');
@@ -86,7 +86,7 @@ const styles = () => ({
 
 class SwipeView extends Component {
     static flattenItemObj(item) {
-        const {potentialRoommate, ...other} = item;
+        const { potentialRoommate, ...other } = item;
         other.distance = other.distance.distance;
         return {
             ...potentialRoommate,
@@ -183,26 +183,31 @@ class SwipeView extends Component {
         const user = this.state.users[index];
         // swiped right
         if (index > this.state.currentPageIndex) {
-            this.constructor.callNative('trackEvent', {event: 'SwipeRight', ...this.constructor.buildMixPanelObj(user)});
+            this.constructor.callNative('trackEvent', { event: 'SwipeRight', ...this.constructor.buildMixPanelObj(user) });
         } else if (index < this.state.currentPageIndex) {
-            this.constructor.callNative('trackEvent', {event: 'SwipeLeft', ...this.constructor.buildMixPanelObj(user)});
+            this.constructor.callNative('trackEvent', { event: 'SwipeLeft', ...this.constructor.buildMixPanelObj(user) });
         }
-        this.setState({currentPageIndex: index, currentUserLocation: user.locality});
+        this.setState({ currentPageIndex: index, currentUserLocation: user.locality });
     }
 
     async fetchUsersData() {
         try {
-            this.setState({loading: true});
+            this.setState({ loading: true });
             const response = await fetch(`${API_ENDPOINTS.potentialRoommates}${window.location.search}`);
             const reponseJson = await response.json();
             console.log(reponseJson);
-            const users = reponseJson.items.map((item, index) => {
-                const user = this.constructor.flattenItemObj(item);
-                // this could lade before user component mounts
-                this.fetchMutualFriends(user.userID, index);
-                this.fetchMutualLikes(user.userID, index);
-                return user;
-            });
+            let users = [];
+            if (reponseJson.items == null) {
+                users = [];
+            } else {
+                users = reponseJson.items.map((item, index) => {
+                    const user = this.constructor.flattenItemObj(item);
+                    // this could lade before user component mounts
+                    this.fetchMutualFriends(user.userID, index);
+                    this.fetchMutualLikes(user.userID, index);
+                    return user;
+                });
+            }
             this.setState({
                 loading: false,
                 users,
@@ -210,20 +215,24 @@ class SwipeView extends Component {
                 totalPages: users.length,
                 currentUserLocation: users[0].locality,
             });
-        } catch (error) {
+        }
+
+        catch (error) {
             console.log(error);
         }
     }
 
     async fetchMutualFriends(userId, userIndex) {
         try {
-            const response = await fetch(`${API_ENDPOINTS.mutualFriends(userId)}`);
-            const reponseJson = await response.json();
+            const response = await
+                fetch(`${API_ENDPOINTS.mutualFriends(userId)}`);
+            const reponseJson = await
+                response.json();
             const mutualFriends = reponseJson.context.all_mutual_friends;
             if (mutualFriends) {
                 const users = [...this.state.users];
                 users[userIndex].mutualFriendsCount = mutualFriends.summary.total_count;
-                this.setState({users});
+                this.setState({ users });
             }
         } catch (error) {
             console.log(error);
@@ -232,13 +241,15 @@ class SwipeView extends Component {
 
     async fetchMutualLikes(userId, userIndex) {
         try {
-            const response = await fetch(`${API_ENDPOINTS.mutualLikes(userId)}`);
-            const reponseJson = await response.json();
+            const response = await
+                fetch(`${API_ENDPOINTS.mutualLikes(userId)}`);
+            const reponseJson = await
+                response.json();
             const mutualLikes = reponseJson.context.mutual_likes;
             if (mutualLikes) {
                 const users = [...this.state.users];
                 users[userIndex].mutualLikesCount = mutualLikes.summary.total_count;
-                this.setState({users});
+                this.setState({ users });
             }
         } catch (error) {
             console.log(error);
@@ -250,18 +261,19 @@ class SwipeView extends Component {
         const user = users[userIndex];
         user.favored = true;
         // call native method
-        this.constructor.callNative('favor', {$user_id: user.uuid});
-        this.setState({users});
+        this.constructor.callNative('favor', { $user_id: user.uuid });
+        this.setState({ users });
         try {
-            const response = await fetch(`${API_ENDPOINTS.like(user.uuid)}`, {
-                method: 'POST',
-            });
+            const response = await
+                fetch(`${API_ENDPOINTS.like(user.uuid)}`, {
+                    method: 'POST',
+                });
             if (response.status !== 200) {
                 throw new Error('Unable to favor user');
             }
         } catch (error) {
             user.favored = false;
-            this.setState({users});
+            this.setState({ users });
             console.log(error);
         }
     }
@@ -270,17 +282,18 @@ class SwipeView extends Component {
         const users = [...this.state.users];
         const user = users[userIndex];
         user.favored = false;
-        this.setState({users});
+        this.setState({ users });
         try {
-            const response = await fetch(`${API_ENDPOINTS.unfavor(user.uuid)}`, {
-                method: 'POST',
-            });
+            const response = await
+                fetch(`${API_ENDPOINTS.unfavor(user.uuid)}`, {
+                    method: 'POST',
+                });
             if (response.status !== 200) {
                 throw new Error('Unable to unfavor user');
             }
         } catch (error) {
             user.favored = true;
-            this.setState({users});
+            this.setState({ users });
             console.log(error);
         }
     }
@@ -302,7 +315,7 @@ class SwipeView extends Component {
 
     onClickMessageBtn(user) {
         // call native method
-        return () => this.constructor.callNative('messageUser', {$user_id: user.uuid});
+        return () => this.constructor.callNative('messageUser', { $user_id: user.uuid });
     }
 
     onClickFilter() {
@@ -341,32 +354,32 @@ class SwipeView extends Component {
 
 
     render() {
-        const {props, state} = this;
-        const {classes} = props;
+        const { props, state } = this;
+        const { classes } = props;
         if (state.loading) {
-            return (<CircularProgress size={50} style={{color: blue[500]}}/>);
+            return (<CircularProgress size={50} style={{ color: blue[500] }}/>);
         } else if (state.users.length === 0) {
             return (
                 <div className={classes.emptyView}>
                     <img src={API_ENDPOINTS.userImage(FACEBOOK_ID)}/>
-                    <div style={{marginTop: 'auto', width: '100%'}}>
-                        <div style={{marginBottom: 20}}>
+                    <div style={{ marginTop: 'auto', width: '100%' }}>
+                        <div style={{ marginBottom: 20 }}>
                             That's everyone in your area
                         </div>
-                            <Button className={classes.blueButton} onclick={this.onClickFilter}>
-                                Adjust Filters
-                            </Button>
-                            <Button className={classes.blueButton} onClick={this.fetchUsersData}>
-                                Scan Again
-                            </Button>
-                            <Button className={classes.blueButton} onClick={this.onClickFeedback}>
-                                Why can't you find a roommate?
-                            </Button>
+                        <Button className={classes.blueButton} onclick={this.onClickFilter}>
+                            Adjust Filters
+                        </Button>
+                        <Button className={classes.blueButton} onClick={this.fetchUsersData}>
+                            Scan Again
+                        </Button>
+                        <Button className={classes.blueButton} onClick={this.onClickFeedback}>
+                            Why can't you find a roommate?
+                        </Button>
                     </div>
                 </div>
             );
         }
-        const {swipeViewRoot, swipeViewContainer, slideStyle} = this.swipeStyles;
+        const { swipeViewRoot, swipeViewContainer, slideStyle } = this.swipeStyles;
         return (
             <div className={classes.container}>
                 <SwipeableViews
