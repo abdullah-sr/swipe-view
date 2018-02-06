@@ -213,7 +213,7 @@ class SwipeView extends Component {
                 users,
                 currentPageIndex: 0,
                 totalPages: users.length,
-                currentUserLocation: users[0].locality,
+                currentUserLocation: users[0] ? users[0].locality : '',
             });
         }
 
