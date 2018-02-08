@@ -366,7 +366,7 @@ class SwipeView extends Component {
                         <div style={{ marginBottom: 20 }}>
                             That's everyone in your area
                         </div>
-                        <Button className={classes.blueButton} onclick={this.onClickFilter}>
+                        <Button className={classes.blueButton} onClick={this.onClickFilter}>
                             Adjust Filters
                         </Button>
                         <Button className={classes.blueButton} onClick={this.fetchUsersData}>
