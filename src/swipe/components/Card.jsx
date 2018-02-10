@@ -177,7 +177,7 @@ class Card extends Component {
                         }
                         {props.mutualLikesCount > 0 &&
                         <div className={classes.label}>
-                            {`${props.mutualLikesCount} mutual likes${props.mutualLikesCount > 1 ? 's' : ''}`}
+                            {`${props.mutualLikesCount} mutual like${props.mutualLikesCount > 1 ? 's' : ''}`}
                         </div>
                         }
                     </div>
