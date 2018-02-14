@@ -18,7 +18,10 @@ const styles = () => ({
             height: '100%',
             margin: 0,
             backgroundColor: '#eaeaea',
-            '@media (max-width: 320px)': {
+            '@media (max-width: 380px)': {
+                fontSize: 14,
+            },
+            '@media (max-height: 600px)': {
                 fontSize: 14,
             },
         },
