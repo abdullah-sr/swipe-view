@@ -338,7 +338,7 @@ class SwipeView extends Component {
                     firstName={user.firstName}
                     lastName={user.lastName}
                     age={this.constructor.calculateAge(user.birthDate)}
-                    bio={user.aboutMe.length < 220 ? user.aboutMe : `${user.aboutMe.slice(0, 220)}...`}
+                    bio={`${user.aboutMe.slice(0, 150)}...`}
                     rent={`$${user.budget}`}
                     type={user.hasPlace ? 'Has a room' : 'Needs a room'}
                     mutualFriendsCount={user.mutualFriendsCount}

@@ -41,6 +41,7 @@ const styles = () => ({
     },
     location: {
         display: 'flex',
+        flexShrink: 0,
         flexDirection: 'column',
         marginBottom: 3,
         fontWeight: 600,
@@ -58,6 +59,7 @@ const styles = () => ({
         marginTop: 'auto',
     },
     messageButton: {
+        flexShrink: 0,
         color: '#fff',
         backgroundColor: '#0072d0',
         borderRadius: 5,
@@ -71,6 +73,7 @@ const styles = () => ({
         },
     },
     viewProfileBtn: {
+        flexShrink: 0,
         backgroundColor: 'rgba(242, 242, 242, 0.7) !important',
         borderRadius: 10,
         padding: '5px 10px',
@@ -84,8 +87,8 @@ const styles = () => ({
     },
     favoriteButton: {
         position: 'absolute',
-        top: 5,
-        right: 5,
+        top: 0,
+        right: 0,
         color: 'rgb(109, 174, 228)',
         '& .material-icons': {
             fontSize: '2rem',
