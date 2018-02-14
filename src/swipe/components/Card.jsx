@@ -43,7 +43,7 @@ const styles = () => ({
         display: 'flex',
         flexShrink: 0,
         flexDirection: 'column',
-        marginBottom: 3,
+        marginBottom: 5,
         marginRight: 30,
         fontWeight: 600,
         fontSize: '1.125rem',
@@ -136,6 +136,12 @@ const styles = () => ({
         fontWeight: 400,
         color: '#88c346',
     },
+    school: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        marginBottom: 2,
+    },
 });
 
 
@@ -203,7 +209,7 @@ class Card extends Component {
                         </svg>
                     </IconButton>
                     <div className={classes.location}>
-                        {props.school && <div>{props.school}</div>}
+                        {props.school && <div className={classes.school}>{props.school}</div>}
                         {props.location && <div>{props.location}</div>}
                     </div>
                     <div className={classes.bio}>
