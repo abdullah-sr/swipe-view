@@ -159,7 +159,6 @@ class Card extends Component {
     render() {
         const { props } = this;
         const { classes } = props;
-        console.log('card re-rendered');
         return (
             <div className={classes.card}>
                 <div className={classes.name}>

@@ -195,7 +195,7 @@ class SwipeView extends Component {
             this.setState({ loading: true });
             const response = await fetch(`${API_ENDPOINTS.potentialRoommates}${window.location.search}`);
             const reponseJson = await response.json();
-            console.log(reponseJson);
+            // console.log(reponseJson);
             let users = [];
             if (reponseJson.items == null) {
                 users = [];
@@ -333,7 +333,7 @@ class SwipeView extends Component {
                     key={user.uuid}
                     src={API_ENDPOINTS.userImage(user.userID)}
                     location={`${user.locality}, ${user.state}`}
-                    school={user.school || ''}
+                    school={user.school && user.roommatePreferenceType === 'COLLEGE' ? user.school : ''}
                     new={!user.hasSeen}
                     firstName={user.firstName}
                     lastName={user.lastName}
