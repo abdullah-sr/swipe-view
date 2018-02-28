@@ -172,9 +172,13 @@ class SwipeView extends Component {
             this.constructor.callNative('trackEvent', { event: 'SwipeRight', ...this.constructor.buildMixPanelObj(user) });
             this.setState({ currentPageIndex: index, currentUserLocation: user.locality });
         } else if (index < state.currentPageIndex) {
-            const user = state.users[index + 1];
-            this.constructor.callNative('trackEvent', { event: 'SwipeLeft', ...this.constructor.buildMixPanelObj(user) });
-            this.setState({ currentPageIndex: index, currentUserLocation: user.locality });
+            let user;
+            // when user is on the last card (empty view), don't call native since it's not actually a user
+            if (index + 1 < state.totalPages) {
+                user = state.users[index + 1];
+                this.constructor.callNative('trackEvent', { event: 'SwipeLeft', ...this.constructor.buildMixPanelObj(user) });
+            }
+            this.setState({ currentPageIndex: index, currentUserLocation: user ? user.locality : '' });
         }
     }
 
@@ -346,6 +350,7 @@ class SwipeView extends Component {
         const { swipeViewRoot, swipeViewContainer, slideStyle } = this.swipeStyles;
         const emptyView = (
             <EmptyView
+                key="empty"
                 facebookId={API_ENDPOINTS.userImage(FACEBOOK_ID)}
                 onClickFilter={this.onClickFilter}
                 fetchUsersData={this.fetchUsersData}
