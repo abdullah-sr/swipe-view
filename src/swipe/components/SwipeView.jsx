@@ -3,9 +3,9 @@ import { withStyles } from 'material-ui/styles';
 import SwipeableViews from 'react-swipeable-views';
 import { CircularProgress } from 'material-ui/Progress';
 import { blue } from 'material-ui/colors';
-import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import Card from './Card';
+import EmptyView from './EmptyView';
 import { API_ENDPOINTS } from '../../constants';
 
 const [, USER_ID, FACEBOOK_ID] = window.location.search.match(/userId=([^&]*).*facebookid=([^&]*)/);
@@ -50,22 +50,6 @@ const styles = () => ({
     page: {
         fontSize: '.9rem',
         fontWeight: 400,
-    },
-    emptyView: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        width: '100%',
-        height: '100%',
-        '& img': {
-            borderRadius: '50%',
-            width: '25%',
-            border: '2px solid #9c9c9c',
-            marginTop: 'auto',
-            marginBottom: 70,
-        },
     },
     blueButton: {
         color: '#fff',
@@ -180,14 +164,18 @@ class SwipeView extends Component {
     }
 
     onChangeIndex(index) {
-        const user = this.state.users[index];
+        // index is the position of the new card. make sure to use the index of the card we just swiped on.
+        const { state } = this;
         // swiped right
-        if (index > this.state.currentPageIndex) {
+        if (index > state.currentPageIndex) {
+            const user = state.users[index - 1];
             this.constructor.callNative('trackEvent', { event: 'SwipeRight', ...this.constructor.buildMixPanelObj(user) });
-        } else if (index < this.state.currentPageIndex) {
+            this.setState({ currentPageIndex: index, currentUserLocation: user.locality });
+        } else if (index < state.currentPageIndex) {
+            const user = state.users[index + 1];
             this.constructor.callNative('trackEvent', { event: 'SwipeLeft', ...this.constructor.buildMixPanelObj(user) });
+            this.setState({ currentPageIndex: index, currentUserLocation: user.locality });
         }
-        this.setState({ currentPageIndex: index, currentUserLocation: user.locality });
     }
 
     async fetchUsersData() {
@@ -352,34 +340,23 @@ class SwipeView extends Component {
         });
     }
 
-
     render() {
         const { props, state } = this;
         const { classes } = props;
+        const { swipeViewRoot, swipeViewContainer, slideStyle } = this.swipeStyles;
+        const emptyView = (
+            <EmptyView
+                facebookId={API_ENDPOINTS.userImage(FACEBOOK_ID)}
+                onClickFilter={this.onClickFilter}
+                fetchUsersData={this.fetchUsersData}
+                onClickFeedback={this.onClickFeedback}
+            />
+        );
         if (state.loading) {
             return (<CircularProgress size={50} style={{ color: blue[500] }}/>);
         } else if (state.users.length === 0) {
-            return (
-                <div className={classes.emptyView}>
-                    <img src={API_ENDPOINTS.userImage(FACEBOOK_ID)}/>
-                    <div style={{ marginTop: 'auto', width: '100%' }}>
-                        <div style={{ marginBottom: 20 }}>
-                            That's everyone in your area
-                        </div>
-                        <Button className={classes.blueButton} onClick={this.onClickFilter}>
-                            Adjust Filters
-                        </Button>
-                        <Button className={classes.blueButton} onClick={this.fetchUsersData}>
-                            Scan Again
-                        </Button>
-                        <Button className={classes.blueButton} onClick={this.onClickFeedback}>
-                            Why can't you find a roommate?
-                        </Button>
-                    </div>
-                </div>
-            );
+            return emptyView;
         }
-        const { swipeViewRoot, swipeViewContainer, slideStyle } = this.swipeStyles;
         return (
             <div className={classes.container}>
                 <SwipeableViews
@@ -388,7 +365,7 @@ class SwipeView extends Component {
                     slideStyle={slideStyle}
                     onChangeIndex={this.onChangeIndex}
                 >
-                    {this.listItems()}
+                    {[...this.listItems(), emptyView]}
                 </SwipeableViews>
                 <div className={classes.footer}>
                     <div className={classes.location}>
@@ -400,7 +377,11 @@ class SwipeView extends Component {
                         </svg>
                         {state.currentUserLocation}
                     </div>
-                    <div className={classes.page}>{state.currentPageIndex + 1}/{state.totalPages}</div>
+                    <div
+                        className={classes.page}>
+                        {state.currentPageIndex < state.totalPages ?
+                            state.currentPageIndex + 1 :
+                            state.currentPageIndex}/{state.totalPages}</div>
                     <IconButton
                         className={classes.filterButton}
                         onClick={this.onClickFilter}
